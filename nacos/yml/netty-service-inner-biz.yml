@@ -1,0 +1,12 @@
+netty:
+  server:
+    port: 12002
+    ## 水位线设置
+    low-water-mark: 32768
+    high-water-mark: 3276800
+    max-frame-length: 1195725860
+    wait-connect-queue-size: 512
+    is-keep-alive: true
+    application-name: netty-server-inner-websocket
+  client:
+    service-name: netty-server-core-websocket

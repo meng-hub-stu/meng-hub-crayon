@@ -19,3 +19,6 @@ hy:
     column: tenant_id
     tables:
       - teacher
+netty:
+  client:
+    service-name: netty-server-inner-websocket

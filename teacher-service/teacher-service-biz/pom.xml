@@ -67,6 +67,12 @@
             <artifactId>student-service-api</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+        <!--接入行情        -->
+        <dependency>
+            <groupId>com.crayon</groupId>
+            <artifactId>netty-service-client</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
 </project>
