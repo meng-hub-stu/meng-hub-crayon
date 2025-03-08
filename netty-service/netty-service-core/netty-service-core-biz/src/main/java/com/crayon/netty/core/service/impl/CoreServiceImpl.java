@@ -30,7 +30,7 @@ public class CoreServiceImpl implements CoreService {
     @Override
     public void sendMessage() {
         for (int i = 0; i < 20; i++) {
-            System.out.println("发送消息" + i);
+            System.out.println("core服务发送消息" + i);
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
@@ -38,7 +38,7 @@ public class CoreServiceImpl implements CoreService {
             }
             ThirdMessage message = ThirdMessage.builder()
                     .messageId(i)
-                    .messageContent("第几条消息了： " + i)
+                    .messageContent("core服务发送消息，第几条消息了： " + i)
                     .type(i <= 5 ? "test" : "dev")
                     .build();
             for (Map.Entry<ChannelId, List<Channel>> channelIdListEntry : NettyChannelManager.getCHANNEL_GROUP_MAP().entrySet()) {

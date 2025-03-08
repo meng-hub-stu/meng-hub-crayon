@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      username: ${MYSQL_USER:root}
+      password: ${MYSQL_PWD:root}
+      url: jdbc:mysql://${MYSQL_HOST:127.0.0.1}:${MYSQL_PORT:3306}/${MYSQL_DB:hub_crayon}?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2B8&allowMultiQueries=true&allowPublicKeyRetrieval=true&rewriteBatchedStatements=true
+
+netty:
+  server:
+    port: 12002
+    ## 水位线设置
+    low-water-mark: 32768
+    high-water-mark: 3276800
+    max-frame-length: 1195725860
+    wait-connect-queue-size: 512
+    is-keep-alive: true
+    application-name: netty-server-out-websocket
+  client:
+    service-name: netty-server-core-websocket

@@ -35,7 +35,7 @@ public class MessageRunner implements ApplicationRunner {
             for (Map.Entry<ChannelId, List<Channel>> listEntry : NettyChannelManager.getCHANNEL_GROUP_MAP().entrySet()) {
                 List<Channel> channels = listEntry.getValue();
                 channels.forEach(channel -> {
-                    channel.writeAndFlush(new TextWebSocketFrame(data));
+                    channel.writeAndFlush(new TextWebSocketFrame("out 转发" + data));
                 });
             }
 

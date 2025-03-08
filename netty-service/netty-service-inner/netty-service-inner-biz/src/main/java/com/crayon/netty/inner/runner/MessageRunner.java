@@ -38,7 +38,7 @@ public class MessageRunner implements ApplicationRunner {
             log.info("inner 发送消息，send message data:{}", data);
             for (Map.Entry<ChannelId, List<Channel>> listEntry : NettyChannelManager.getCHANNEL_GROUP_MAP().entrySet()) {
                 List<Channel> channels = listEntry.getValue();
-                ByteBuf message = Unpooled.copiedBuffer(data, CharsetUtil.UTF_8);
+                ByteBuf message = Unpooled.copiedBuffer("inner 转发" + data, CharsetUtil.UTF_8);
                 channels.forEach(channel -> {
                     channel.writeAndFlush(message);
                 });
