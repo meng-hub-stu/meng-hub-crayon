@@ -43,7 +43,13 @@ public class NettyChannelInitializer extends ChannelInitializer<SocketChannel> {
         pipeline.addLast(new ChunkedWriteHandler());
         // 配置读空闲Handler， 60分钟秒该Channel没有产生读将会触发读空闲事件
         pipeline.addLast(new IdleStateHandler(60, 0, 0, TimeUnit.MINUTES));
-        pipeline.addLast(new WebSocketServerProtocolHandler("/ws/message", WEBSOCKET_PATH, true, 65536 * 10, false, true));
+        pipeline.addLast(new WebSocketServerProtocolHandler(
+                "/ws/message",
+                WEBSOCKET_PATH,
+                true,
+                65536 * 10,
+                false,
+                true));
         pipeline.addLast(new HealthCheckHandler());
         pipeline.addLast(new TextChannelHandler());
     }

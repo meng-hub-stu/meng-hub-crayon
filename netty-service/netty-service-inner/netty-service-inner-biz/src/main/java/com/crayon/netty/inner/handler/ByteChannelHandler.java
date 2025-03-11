@@ -21,7 +21,7 @@ public class ByteChannelHandler extends SimpleChannelInboundHandler<ByteBuf> {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        log.error("netty-core error,ex:{}", cause.getMessage());
+        log.error("netty-inner error,ex:{}", cause.getMessage());
         ctx.close();
     }
 

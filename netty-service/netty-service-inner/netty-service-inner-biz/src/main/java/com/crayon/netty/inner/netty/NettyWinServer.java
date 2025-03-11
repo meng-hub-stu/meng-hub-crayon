@@ -53,10 +53,17 @@ public class NettyWinServer {
                 .group(mainGrp, subGrp)
                 // 指定Netty通道类型
                 .channel(NioServerSocketChannel.class)
-                .childOption(ChannelOption.WRITE_BUFFER_WATER_MARK, new WriteBufferWaterMark(nettyServerProperties.getLowWaterMark(),
-                        nettyServerProperties.getHighWaterMark()))
-                .option(ChannelOption.SO_BACKLOG, nettyServerProperties.getWaitConnectQueueSize())
-                .childOption(ChannelOption.SO_KEEPALIVE, nettyServerProperties.isKeepAlive())
+                .childOption(
+                        ChannelOption.WRITE_BUFFER_WATER_MARK,
+                        new WriteBufferWaterMark(
+                                nettyServerProperties.getLowWaterMark(),
+                                nettyServerProperties.getHighWaterMark()))
+                .option(
+                        ChannelOption.SO_BACKLOG,
+                        nettyServerProperties.getWaitConnectQueueSize())
+                .childOption(
+                        ChannelOption.SO_KEEPALIVE,
+                        nettyServerProperties.isKeepAlive())
                 // 指定通道初始化器用来加载当Channel收到事件消息后
                 .childHandler(nettyChannelInitializer);
         start();

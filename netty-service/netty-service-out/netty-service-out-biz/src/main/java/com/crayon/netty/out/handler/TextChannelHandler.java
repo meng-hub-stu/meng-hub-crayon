@@ -20,7 +20,7 @@ public class TextChannelHandler extends SimpleChannelInboundHandler<TextWebSocke
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        log.error("netty-core error,ex:{}", cause.getMessage());
+        log.error("netty-out error,ex:{}", cause.getMessage());
         ctx.close();
     }
 

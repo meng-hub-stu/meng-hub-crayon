@@ -26,4 +26,5 @@ public class NettyServerProperties {
     private String metaDataKey;
     private String metaDataValue;
     private Long tenantId = 0L;
+    private Long delayTime = 400L;
 }

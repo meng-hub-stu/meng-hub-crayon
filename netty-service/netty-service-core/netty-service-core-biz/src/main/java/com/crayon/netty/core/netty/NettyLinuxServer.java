@@ -52,7 +52,18 @@ public class NettyLinuxServer {
                 // 指定使用上面创建的两个线程池
                 .group(mainGrp, subGrp)
                 // 指定Netty通道类型
-                .channel(EpollServerSocketChannel.class).childOption(ChannelOption.WRITE_BUFFER_WATER_MARK, new WriteBufferWaterMark(nettyServerProperties.getLowWaterMark(), nettyServerProperties.getHighWaterMark())).option(ChannelOption.SO_BACKLOG, nettyServerProperties.getWaitConnectQueueSize()).childOption(ChannelOption.SO_KEEPALIVE, nettyServerProperties.isKeepAlive())
+                .channel(EpollServerSocketChannel.class)
+                .childOption(
+                        ChannelOption.WRITE_BUFFER_WATER_MARK,
+                        new WriteBufferWaterMark(
+                                nettyServerProperties.getLowWaterMark(),
+                                nettyServerProperties.getHighWaterMark()))
+                .option(
+                        ChannelOption.SO_BACKLOG,
+                        nettyServerProperties.getWaitConnectQueueSize())
+                .childOption(
+                        ChannelOption.SO_KEEPALIVE,
+                        nettyServerProperties.isKeepAlive())
                 // 指定通道初始化器用来加载当Channel收到事件消息后
                 .childHandler(nettyChannelInitializer);
         start();
