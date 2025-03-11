@@ -1,7 +1,10 @@
 package com.crayon.student.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.crayon.common.core.util.IStatus;
 import com.crayon.common.core.util.R;
+import com.crayon.common.data.transaction.NoticeTransaction;
+import com.crayon.student.entity.enums.GradeType;
 import com.crayon.student.entity.model.Student;
 import com.crayon.student.entity.resp.StudentResp;
 import com.crayon.student.entity.resp.TeacherResp;
@@ -23,6 +26,7 @@ import static com.alibaba.fastjson2.JSON.copyTo;
 public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> implements StudentService {
 
     private final TeacherFeignClient teacherFeignClient;
+    private final NoticeTransaction noticeTransaction;
 
     @Override
     public StudentResp detail(Long id) {
@@ -32,6 +36,15 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> impl
         if (teacherR.isOk() && teacherR.getData() != null) {
             resp.setTeacherResp(copyTo(teacherR.getData(), TeacherResp.class));
         }
+        //事务完成之后通知
+        noticeTransaction.transMessage(consumer -> {
+            System.out.println("你好");
+        });
+        //测试枚举
+        IStatus.find(1, GradeType.class).ifPresent(e -> resp.setGradeTypeName(e.getDesc()));
+        GradeType one = GradeType.valueOf("ONE");
+
+
         return resp;
     }
 

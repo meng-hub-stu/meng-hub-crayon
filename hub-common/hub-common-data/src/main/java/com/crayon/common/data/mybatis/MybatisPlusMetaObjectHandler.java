@@ -75,7 +75,7 @@ public class MybatisPlusMetaObjectHandler implements MetaObjectHandler {
      * @return 当前用户名
      */
     private String getUserName() {
-        return null;
+        return "mengdexin";
     }
 
 }

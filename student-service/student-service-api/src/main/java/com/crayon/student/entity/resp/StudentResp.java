@@ -18,4 +18,6 @@ public class StudentResp extends Student {
     @Schema(description = "老师信息")
     private TeacherResp teacherResp;
 
+    private String gradeTypeName;
+
 }
