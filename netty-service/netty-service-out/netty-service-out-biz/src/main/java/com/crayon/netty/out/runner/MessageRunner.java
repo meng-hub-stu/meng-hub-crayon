@@ -29,7 +29,7 @@ public class MessageRunner implements ApplicationRunner {
 
     private final NettyClientConnect nettyClientConnect;
     private final NettyServerProperties nettyServerProperties;
-    private static Map<String, Long> DATE_DELAY = new ConcurrentHashMap<>();
+    private static final Map<String, Long> DATE_DELAY = new ConcurrentHashMap<>();
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
