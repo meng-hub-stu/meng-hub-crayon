@@ -5,7 +5,6 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
-import io.netty.util.AttributeKey;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -15,11 +14,10 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class TextChannelHandler extends SimpleChannelInboundHandler<TextWebSocketFrame> {
 
-    private final AttributeKey<String> studentKey = AttributeKey.valueOf("studentKey");
-    private final AttributeKey<String> teacherKey = AttributeKey.valueOf("teacherKey");
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+        log.info("channelInactive channelId: {}", ctx.channel().id());
         NettyChannelManager.clearChannel(ctx.channel());
     }
 
@@ -52,7 +50,8 @@ public class TextChannelHandler extends SimpleChannelInboundHandler<TextWebSocke
     public void channelRegistered(ChannelHandlerContext ctx) throws Exception {
         log.info("channelRegistered channelId: {}", ctx.channel().id());
         Channel channel = ctx.channel();
-        channel.attr(studentKey);
+        //不同的通道可以进行设置一下
+        channel.attr(NettyChannelManager.getSTUDENT_KEY()).set("123");
         NettyChannelManager.addChannel(ctx.channel());
     }
 

@@ -2,6 +2,7 @@ package com.crayon.netty.out.netty;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelId;
+import io.netty.util.AttributeKey;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -18,9 +19,10 @@ public class NettyChannelManager {
 
     @Getter
     private static final Map<ChannelId, List<Channel>> CHANNEL_GROUP_MAP = new ConcurrentHashMap<>();
-
-    private NettyChannelManager() {
-    }
+    @Getter
+    private static final AttributeKey<String> STUDENT_KEY = AttributeKey.valueOf("studentKey");
+    @Getter
+    private static final AttributeKey<String> TEACHER_KEY = AttributeKey.valueOf("teacherKey");
 
     /**
      * 添加channel
