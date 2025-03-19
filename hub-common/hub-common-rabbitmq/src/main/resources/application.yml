@@ -1,0 +1,14 @@
+spring:
+  rabbitmq:
+#   发送者
+    publisher-confirm-type: correlated # 启用Confirm模式
+    publisher-returns: true # 启用Return机制
+#   接受者
+    listener:
+      simple:
+        acknowledge-mode: manual # 手动确认
+        prefetch: 10 # 每次只消费一个消息
+  template:
+    mandatory: true # 让生产者接收未被路由的消息通知
+
+

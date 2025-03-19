@@ -4,8 +4,10 @@ import com.crayon.netty.client.config.NettyClientAction;
 import com.crayon.netty.client.config.NettyClientProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.net.URISyntaxException;
@@ -22,6 +24,7 @@ import static com.baomidou.mybatisplus.core.toolkit.CollectionUtils.isNotEmpty;
 @Slf4j
 @Component
 @RequiredArgsConstructor
+@Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class NettyClientConnect {
 
     private final DiscoveryClient discoveryClient;
