@@ -15,6 +15,7 @@ import io.netty.handler.logging.LoggingHandler;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.URI;
+import java.util.List;
 
 /**
  * @author Mengdl
@@ -24,11 +25,13 @@ import java.net.URI;
 public class WebSocketClient {
 
     private final URI uri;
+    private final NettyClientMessage nettyClientMessage;
     private Bootstrap bootstrap;
     private final EventLoopGroup group = new NioEventLoopGroup();
 
-    public WebSocketClient(URI wsUrl) {
+    public WebSocketClient(URI wsUrl, NettyClientMessage nettyClientMessage) {
         this.uri = wsUrl;
+        this.nettyClientMessage = nettyClientMessage;
     }
 
     public void init() throws Exception {
@@ -51,7 +54,8 @@ public class WebSocketClient {
                                         WebSocketVersion.V13,
                                         null,
                                         false,
-                                        new DefaultHttpHeaders())
+                                        new DefaultHttpHeaders()),
+                                nettyClientMessage
                         ));
                     }
                 });
@@ -75,10 +79,20 @@ public class WebSocketClient {
     }
 
     public static void main(String[] args) throws Exception {
-        URI uri = new URI("ws://127.0.0.1:12003/ws/message");
-        WebSocketClient client = new WebSocketClient(uri);
-        client.init();
-        client.connect();
+        //可能会有多个地址需要连接，这里可以用线程池来连接
+        List<URI> uris = List.of(new URI("ws://127.0.0.1:12003/ws/message"));
+        NettyClientMessage nettyClientMessage = data -> {
+            System.out.println("Received message: " + data);
+        };
+        uris.forEach(uri -> Thread.ofVirtual().start(() -> {
+            try {
+                WebSocketClient client = new WebSocketClient(uri, nettyClientMessage);
+                client.init();
+                client.connect();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }));
     }
 
 }

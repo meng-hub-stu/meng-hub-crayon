@@ -15,9 +15,11 @@ import io.netty.handler.codec.http.websocketx.WebSocketHandshakeException;
 public class WebSocketClientHandler extends SimpleChannelInboundHandler<Object> {
 
     private final WebSocketClientHandshaker handshaker;
+    private final NettyClientMessage nettyClientMessage;
 
-    public WebSocketClientHandler(WebSocketClientHandshaker handshaker) {
+    public WebSocketClientHandler(WebSocketClientHandshaker handshaker, NettyClientMessage nettyClientMessage) {
         this.handshaker = handshaker;
+        this.nettyClientMessage = nettyClientMessage;
     }
 
     @Override
@@ -45,6 +47,7 @@ public class WebSocketClientHandler extends SimpleChannelInboundHandler<Object> 
         // 处理WebSocket帧消息
         if (msg instanceof TextWebSocketFrame) {
             TextWebSocketFrame textFrame = (TextWebSocketFrame) msg;
+            nettyClientMessage.message(textFrame.text());
             System.out.println("Received message: " + textFrame.text());
         } else if (msg instanceof CloseWebSocketFrame) {
             System.out.println("Connection closed by server");

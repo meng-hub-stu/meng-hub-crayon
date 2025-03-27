@@ -1,9 +1,15 @@
 package com.crayon.student.controller;
 
+import com.alibaba.fastjson2.JSON;
+import com.crayon.student.entity.model.Student;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.IOUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.nio.charset.StandardCharsets;
 
 /**
  * @author Mengdl
@@ -19,6 +25,15 @@ public class TestLogController {
         log.info("这是一行info日志");
         log.error("这是一行error日志");
         return "success";
+    }
+
+    @RequestMapping(value = "/body", method = RequestMethod.POST)
+    public Student test(HttpServletRequest request) throws Exception {
+        String body = IOUtils.toString(request.getInputStream(), StandardCharsets.UTF_8);
+        String body1 = request.getParameter("data");
+        log.info("这是一行info日志,body:{}", body);
+        Student student = JSON.parseObject(body, Student.class);
+        return student;
     }
 
 }
