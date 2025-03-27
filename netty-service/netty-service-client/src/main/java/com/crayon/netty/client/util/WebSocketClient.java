@@ -29,8 +29,8 @@ public class WebSocketClient {
     private Bootstrap bootstrap;
     private final EventLoopGroup group = new NioEventLoopGroup();
 
-    public WebSocketClient(URI wsUrl, NettyClientMessage nettyClientMessage) {
-        this.uri = wsUrl;
+    public WebSocketClient(URI uri, NettyClientMessage nettyClientMessage) {
+        this.uri = uri;
         this.nettyClientMessage = nettyClientMessage;
     }
 
@@ -89,10 +89,13 @@ public class WebSocketClient {
                 WebSocketClient client = new WebSocketClient(uri, nettyClientMessage);
                 client.init();
                 client.connect();
+                client.group.shutdownGracefully();
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         }));
+        //主线程等待
+        Thread.currentThread().join();
     }
 
 }
