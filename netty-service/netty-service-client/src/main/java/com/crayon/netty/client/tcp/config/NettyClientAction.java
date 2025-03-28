@@ -1,4 +1,4 @@
-package com.crayon.netty.client.config;
+package com.crayon.netty.client.tcp.config;
 
 /**
  * @author Mengdl

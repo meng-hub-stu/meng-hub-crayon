@@ -1,4 +1,4 @@
-package com.crayon.netty.client.config;
+package com.crayon.netty.client.tcp.config;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

@@ -1,7 +1,7 @@
-package com.crayon.netty.client.handler;
+package com.crayon.netty.client.tcp.handler;
 
-import com.crayon.netty.client.config.NettyClientAction;
-import com.crayon.netty.client.server.NettyClientServer;
+import com.crayon.netty.client.tcp.server.NettyClientServer;
+import com.crayon.netty.client.tcp.config.NettyClientAction;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;

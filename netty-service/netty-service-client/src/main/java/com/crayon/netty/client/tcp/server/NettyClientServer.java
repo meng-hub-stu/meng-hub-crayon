@@ -1,8 +1,8 @@
-package com.crayon.netty.client.server;
+package com.crayon.netty.client.tcp.server;
 
-import com.crayon.netty.client.config.NettyClientAction;
-import com.crayon.netty.client.config.NettyClientProperties;
-import com.crayon.netty.client.handler.NettyClientHandler;
+import com.crayon.netty.client.tcp.config.NettyClientAction;
+import com.crayon.netty.client.tcp.config.NettyClientProperties;
+import com.crayon.netty.client.tcp.handler.NettyClientHandler;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;

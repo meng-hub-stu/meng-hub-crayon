@@ -1,5 +1,7 @@
-package com.crayon.netty.client.websocket;
+package com.crayon.netty.client.websocket.handler;
 
+import com.crayon.netty.client.websocket.server.WebSocketServer;
+import com.crayon.netty.client.websocket.config.NettyClientMessage;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.FullHttpResponse;
@@ -16,33 +18,31 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class WebSocketClientHandler extends SimpleChannelInboundHandler<Object> {
 
-    private final WebSocketClientHandshaker handshaker;
+    private final WebSocketClientHandshaker handshake;
     private final NettyClientMessage nettyClientMessage;
+    private final WebSocketServer webSocketServer;
 
-    public WebSocketClientHandler(WebSocketClientHandshaker handshaker, NettyClientMessage nettyClientMessage) {
-        this.handshaker = handshaker;
+    public WebSocketClientHandler(WebSocketClientHandshaker handshake,
+                                  NettyClientMessage nettyClientMessage,
+                                  WebSocketServer webSocketServer) {
+        this.handshake = handshake;
         this.nettyClientMessage = nettyClientMessage;
+        this.webSocketServer = webSocketServer;
     }
-
-//    @Override
-//    public void handlerAdded(ChannelHandlerContext ctx) throws Exception {
-//        super.handlerAdded(ctx);
-//        handshaker.handshake(ctx.channel());
-//    }
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         // 发起握手请求
         log.info("Handshake started");
-        handshaker.handshake(ctx.channel());
+        handshake.handshake(ctx.channel());
     }
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, Object msg) {
         // 处理握手响应
-        if (!handshaker.isHandshakeComplete()) {
+        if (!handshake.isHandshakeComplete()) {
             try {
-                handshaker.finishHandshake(ctx.channel(), (FullHttpResponse) msg);
+                handshake.finishHandshake(ctx.channel(), (FullHttpResponse) msg);
                 System.out.println("Handshake complete!");
                 // 握手成功后发送测试消息（可选）
                 TextWebSocketFrame frame = new TextWebSocketFrame("你好啊");
@@ -57,7 +57,6 @@ public class WebSocketClientHandler extends SimpleChannelInboundHandler<Object> 
         if (msg instanceof TextWebSocketFrame) {
             TextWebSocketFrame textFrame = (TextWebSocketFrame) msg;
             nettyClientMessage.message(textFrame.text());
-            System.out.println("Received message: " + textFrame.text());
         } else if (msg instanceof CloseWebSocketFrame) {
             System.out.println("Connection closed by server");
             ctx.close();
@@ -71,7 +70,7 @@ public class WebSocketClientHandler extends SimpleChannelInboundHandler<Object> 
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-        super.channelInactive(ctx);
+        webSocketServer.reconnect();
     }
 
 }

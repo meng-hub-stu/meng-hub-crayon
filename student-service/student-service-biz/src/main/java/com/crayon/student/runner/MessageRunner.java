@@ -1,7 +1,7 @@
 package com.crayon.student.runner;
 
-import com.crayon.netty.client.config.NettyClientAction;
-import com.crayon.netty.client.server.NettyClientConnect;
+import com.crayon.netty.client.tcp.config.NettyClientAction;
+import com.crayon.netty.client.tcp.server.NettyClientConnect;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;

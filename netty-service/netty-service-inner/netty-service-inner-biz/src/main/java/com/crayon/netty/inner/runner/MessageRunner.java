@@ -1,8 +1,7 @@
 package com.crayon.netty.inner.runner;
 
-import com.alibaba.fastjson2.JSON;
-import com.crayon.netty.client.config.NettyClientAction;
-import com.crayon.netty.client.server.NettyClientConnect;
+import com.crayon.netty.client.tcp.config.NettyClientAction;
+import com.crayon.netty.client.tcp.server.NettyClientConnect;
 import com.crayon.netty.inner.netty.NettyChannelManager;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;

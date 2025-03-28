@@ -1,2 +1,2 @@
-com.crayon.netty.client.config.NettyClientProperties
-com.crayon.netty.client.server.NettyClientConnect
+com.crayon.netty.client.tcp.config.NettyClientProperties
+com.crayon.netty.client.tcp.server.NettyClientConnect

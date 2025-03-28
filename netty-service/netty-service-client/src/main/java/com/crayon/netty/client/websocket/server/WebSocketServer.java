@@ -1,5 +1,7 @@
-package com.crayon.netty.client.websocket;
+package com.crayon.netty.client.websocket.server;
 
+import com.crayon.netty.client.websocket.config.NettyClientMessage;
+import com.crayon.netty.client.websocket.handler.WebSocketClientHandler;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -15,21 +17,22 @@ import io.netty.handler.logging.LoggingHandler;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.URI;
-import java.util.List;
 
 /**
  * @author Mengdl
  * @date 2025/03/24
  */
 @Slf4j
-public class WebSocketClient {
+public class WebSocketServer {
 
     private final URI uri;
     private final NettyClientMessage nettyClientMessage;
     private Bootstrap bootstrap;
     private final EventLoopGroup group = new NioEventLoopGroup();
+    private Integer retryCount = 0;
+    private final Integer retryMax = 3;
 
-    public WebSocketClient(URI uri, NettyClientMessage nettyClientMessage) {
+    public WebSocketServer(URI uri, NettyClientMessage nettyClientMessage) {
         this.uri = uri;
         this.nettyClientMessage = nettyClientMessage;
     }
@@ -62,7 +65,8 @@ public class WebSocketClient {
                                         null,
                                         false,
                                         new DefaultHttpHeaders()),
-                                nettyClientMessage
+                                nettyClientMessage,
+                                WebSocketServer.this
                         ));
                     }
                 });
@@ -85,24 +89,27 @@ public class WebSocketClient {
         future.channel().closeFuture().sync();
     }
 
-    public static void main(String[] args) throws Exception {
-        //可能会有多个地址需要连接，这里可以用线程池来连接
-        List<URI> uris = List.of(new URI("ws://127.0.0.1:12003/ws/message"));
-        NettyClientMessage nettyClientMessage = data -> {
-            System.out.println("Received message: " + data);
-        };
-        uris.forEach(uri -> Thread.ofVirtual().start(() -> {
-            try {
-                WebSocketClient client = new WebSocketClient(uri, nettyClientMessage);
-                client.init();
-                client.connect();
-                client.group.shutdownGracefully();
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        }));
-        //主线程等待
-        Thread.currentThread().join();
+    public void reconnect() {
+        if (retryCount > retryMax) {
+            log.error("重连失败，已达最大重试次数");
+            return;
+        }
+        retryCount++;
+        try {
+            log.info("retry connect {} (尝试 {}/{} 在{} ms后)...", uri, retryCount, retryMax, 3000);
+            Thread.sleep(3000);
+            connect();
+        } catch (InterruptedException e) {
+            log.error("尝试重新连接中断，异常:{}", e.getMessage());
+            Thread.currentThread().interrupt();
+        } catch (Exception e) {
+            log.error("重连失败:{}", e.getMessage());
+            reconnect();
+        }
+    }
+
+    public void shutdown() {
+        group.shutdownGracefully();
     }
 
 }

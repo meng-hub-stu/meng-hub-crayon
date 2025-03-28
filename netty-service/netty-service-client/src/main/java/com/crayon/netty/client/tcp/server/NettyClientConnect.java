@@ -1,7 +1,7 @@
-package com.crayon.netty.client.server;
+package com.crayon.netty.client.tcp.server;
 
-import com.crayon.netty.client.config.NettyClientAction;
-import com.crayon.netty.client.config.NettyClientProperties;
+import com.crayon.netty.client.tcp.config.NettyClientAction;
+import com.crayon.netty.client.tcp.config.NettyClientProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;

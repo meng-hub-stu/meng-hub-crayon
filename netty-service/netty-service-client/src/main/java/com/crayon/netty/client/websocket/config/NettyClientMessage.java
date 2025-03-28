@@ -1,4 +1,4 @@
-package com.crayon.netty.client.websocket;
+package com.crayon.netty.client.websocket.config;
 
 /**
  * @author Mengdl
