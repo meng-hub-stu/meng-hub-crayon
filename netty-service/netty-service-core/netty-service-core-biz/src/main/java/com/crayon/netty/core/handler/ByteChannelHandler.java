@@ -16,6 +16,7 @@ public class ByteChannelHandler extends SimpleChannelInboundHandler<ByteBuf> {
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+        log.info("netty-core Inactive");
         NettyChannelManager.clearChannel(ctx.channel());
     }
 
