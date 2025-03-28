@@ -1,4 +1,4 @@
-package com.crayon.netty.client.util;
+package com.crayon.netty.client.websocket;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
@@ -47,6 +47,13 @@ public class WebSocketClient {
                         pipeline.addLast(new HttpClientCodec());
                         // 聚合HTTP报文为FullHttpRequest/Response
                         pipeline.addLast(new HttpObjectAggregator(65536));
+//                        pipeline.addLast(new WebSocketServerProtocolHandler(
+//                                "uri",
+//                                "webSocket",
+//                                true,
+//                                65536 * 10,
+//                                false,
+//                                true));
                         // WebSocket协议处理器
                         pipeline.addLast(new WebSocketClientHandler(
                                 WebSocketClientHandshakerFactory.newHandshaker(

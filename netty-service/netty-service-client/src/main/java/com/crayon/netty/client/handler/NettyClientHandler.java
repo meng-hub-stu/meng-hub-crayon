@@ -32,12 +32,6 @@ public class NettyClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
     }
 
     @Override
-    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        log.error("netty-core error,ex:{}", cause.getMessage());
-        ctx.close();
-    }
-
-    @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf) throws Exception {
         //服务端发过来的消息
         String clientMessage = byteBuf.toString(CharsetUtil.UTF_8);

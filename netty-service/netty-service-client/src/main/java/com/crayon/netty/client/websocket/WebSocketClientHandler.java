@@ -1,4 +1,4 @@
-package com.crayon.netty.client.util;
+package com.crayon.netty.client.websocket;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -7,11 +7,13 @@ import io.netty.handler.codec.http.websocketx.CloseWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.WebSocketClientHandshaker;
 import io.netty.handler.codec.http.websocketx.WebSocketHandshakeException;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author Mengdl
  * @date 2025/03/24
  */
+@Slf4j
 public class WebSocketClientHandler extends SimpleChannelInboundHandler<Object> {
 
     private final WebSocketClientHandshaker handshaker;
@@ -22,9 +24,16 @@ public class WebSocketClientHandler extends SimpleChannelInboundHandler<Object> 
         this.nettyClientMessage = nettyClientMessage;
     }
 
+//    @Override
+//    public void handlerAdded(ChannelHandlerContext ctx) throws Exception {
+//        super.handlerAdded(ctx);
+//        handshaker.handshake(ctx.channel());
+//    }
+
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         // 发起握手请求
+        log.info("Handshake started");
         handshaker.handshake(ctx.channel());
     }
 
@@ -61,9 +70,8 @@ public class WebSocketClientHandler extends SimpleChannelInboundHandler<Object> 
     }
 
     @Override
-    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-        cause.printStackTrace();
-        ctx.close();
+    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+        super.channelInactive(ctx);
     }
 
 }
