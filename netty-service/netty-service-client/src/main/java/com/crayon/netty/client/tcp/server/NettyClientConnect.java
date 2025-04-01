@@ -53,7 +53,6 @@ public class NettyClientConnect {
         List<String> uriList = new ArrayList<>();
         List<ServiceInstance> instances = discoveryClient.getInstances(nettyClientProperties.getServiceName());
         if (isNotEmpty(instances)) {
-            //TODO 可能会有多节点，如果是core服务，需要做判断，或者用别的方式
             instances.forEach(instance -> {
                 String sb = instance.getUri().toString();
                 uriList.add(sb);
@@ -76,6 +75,7 @@ public class NettyClientConnect {
         NettyClientServer client = new NettyClientServer(nettyClientAction, url, nettyClientProperties);
         client.init();
         client.connect();
+        client.shutdown();
     }
 
 }

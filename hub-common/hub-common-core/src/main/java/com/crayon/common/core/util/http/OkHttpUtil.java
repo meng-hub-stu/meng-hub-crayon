@@ -93,16 +93,19 @@ public class OkHttpUtil {
      * @return map
      */
     public static Map<String, Object> jsonConvertMap(String jsonStr) {
-        return JSON.parseObject(jsonStr, new TypeReference<>() {
-        });
+        return JSON.parseObject(jsonStr, new TypeReference<>() {});
     }
 
     public static void main(String[] args) {
         String url = "https://new-mts-api.app-alpha.com/account/account/detail";
         String jsonParam = "{\"accountNo\":\"16456032\"}";
-        String jsonHeader = "{\"Authorization\":\"Bearer 1f8b0004-f2d7-4e67-86ab-b37dcd78ef9b\", \"tenant-id\":\"1\"}";
+        String jsonHeader = "{\"Authorization\":\"Bearer 8884bee2-341e-4ff2-8b40-2f979dbe0d47\", \"tenant-id\":\"1\"}";
         String result = get(url, jsonParam, jsonHeader);
         System.out.println(result);
+        AccountResp<Account> accountResp = JSON.parseObject(result,  new TypeReference<AccountResp<Account>>() {});
+        if (accountResp != null && accountResp.getData() != null) {
+            System.out.println(accountResp.getData().getName());
+        }
     }
 
 }

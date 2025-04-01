@@ -6,6 +6,8 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Map;
 
+import static com.baomidou.mybatisplus.core.toolkit.StringUtils.isBlank;
+import static com.baomidou.mybatisplus.core.toolkit.StringUtils.isNotBlank;
 import static com.crayon.common.core.util.http.OkHttpUtil.convertGetParams;
 import static com.crayon.common.core.util.http.OkHttpUtil.jsonConvertMap;
 
@@ -84,10 +86,33 @@ public class RestTemplateUtil {
         return response.getBody();
     }
 
+    public static String requestRemote(HttpMethod httpMethod, String url, String paramJson, String headerJson) {
+        String response;
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            if (isNotBlank(headerJson)) {
+                jsonConvertMap(headerJson).forEach((k, v) -> headers.add(k, v.toString()));
+            }
+            if (HttpMethod.GET.equals(httpMethod)) {
+                response = REST_TEMPLATE.exchange(url + convertGetParams(paramJson), HttpMethod.GET, new HttpEntity<>(headers), String.class).getBody();
+            } else {
+                HttpEntity<Object> entity = new HttpEntity<>(paramJson, headers);
+                response = REST_TEMPLATE.exchange(url, HttpMethod.POST, entity, String.class).getBody();
+            }
+            if (isBlank(response)) {
+                throw new RuntimeException("request third calling interface error");
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("request third calling interface error :" + e.getMessage());
+        }
+        return response;
+    }
+
     public static void main(String[] args) {
         String url = "https://new-mts-api.app-alpha.com/account/account/detail";
         String jsonParam = "{\"accountNo\":\"16456032\"}";
-        String jsonHeader = "{\"Authorization\":\"Bearer 1f8b0004-f2d7-4e67-86ab-b37dcd78ef9b\", \"tenant-id\":\"1\"}";
+        String jsonHeader = "{\"Authorization\":\"Bearer a8f135a5-fc86-4fd0-bcb0-c5a5adbd0791\", \"tenant-id\":\"1\"}";
         String result = get(url, String.class, jsonHeader, jsonParam);
         System.out.println(result);
     }

@@ -92,4 +92,8 @@ public class NettyClientServer {
         }
     }
 
+    public void shutdown() {
+        group.shutdownGracefully();
+    }
+
 }
