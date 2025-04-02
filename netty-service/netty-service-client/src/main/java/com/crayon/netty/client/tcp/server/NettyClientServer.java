@@ -1,6 +1,7 @@
 package com.crayon.netty.client.tcp.server;
 
 import com.crayon.netty.client.tcp.config.NettyClientAction;
+import com.crayon.netty.client.tcp.config.NettyClientManager;
 import com.crayon.netty.client.tcp.config.NettyClientProperties;
 import com.crayon.netty.client.tcp.handler.NettyClientHandler;
 import io.netty.bootstrap.Bootstrap;
@@ -50,13 +51,13 @@ public class NettyClientServer {
                 .channel(NioSocketChannel.class)
                 .option(ChannelOption.SO_KEEPALIVE, true)
                 .handler(new ChannelInitializer<SocketChannel>() {
-            @Override
-            protected void initChannel(SocketChannel socketChannel) {
-                socketChannel.pipeline().addLast(new LengthFieldBasedFrameDecoder(65536, 0, 4, 0, 4));
-                socketChannel.pipeline().addLast(new LengthFieldPrepender(4));
-                socketChannel.pipeline().addLast(new NettyClientHandler(nettyClientAction, NettyClientServer.this));
-            }
-        });
+                    @Override
+                    protected void initChannel(SocketChannel socketChannel) {
+                        socketChannel.pipeline().addLast(new LengthFieldBasedFrameDecoder(65536, 0, 4, 0, 4));
+                        socketChannel.pipeline().addLast(new LengthFieldPrepender(4));
+                        socketChannel.pipeline().addLast(new NettyClientHandler(nettyClientAction, uri, NettyClientServer.this));
+                    }
+                });
     }
 
     public void connect() throws InterruptedException {
@@ -70,6 +71,7 @@ public class NettyClientServer {
             String message = "Netty Client connected to Netty server message";
             ByteBuf requestParamBuf = Unpooled.copiedBuffer(message, CharsetUtil.UTF_8);
             channelFuture.channel().writeAndFlush(requestParamBuf);
+            NettyClientManager.getServiceUriList().add(uri.toString());
         }
         channelFuture.channel().closeFuture().sync();
     }

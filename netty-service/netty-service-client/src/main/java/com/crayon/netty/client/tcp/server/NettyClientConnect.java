@@ -1,6 +1,7 @@
 package com.crayon.netty.client.tcp.server;
 
 import com.crayon.netty.client.tcp.config.NettyClientAction;
+import com.crayon.netty.client.tcp.config.NettyClientManager;
 import com.crayon.netty.client.tcp.config.NettyClientProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -8,14 +9,18 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.context.annotation.Scope;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.net.URISyntaxException;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.Set;
 
 import static com.baomidou.mybatisplus.core.toolkit.CollectionUtils.isNotEmpty;
+import static com.baomidou.mybatisplus.core.toolkit.ObjectUtils.isNull;
+import static com.baomidou.mybatisplus.core.toolkit.StringUtils.isBlank;
+import static org.springframework.util.CollectionUtils.isEmpty;
 
 /**
  * @author Mengdl
@@ -36,8 +41,8 @@ public class NettyClientConnect {
      * @param nettyClientAction 回调函数
      */
     public void connectServer(NettyClientAction nettyClientAction) {
-//        connectToUrlPort(nettyClientAction);
         connectToServerName(nettyClientAction);
+//        connectToUrlPort(nettyClientAction);
     }
 
     private void connectToUrlPort(NettyClientAction nettyClientAction) {
@@ -50,19 +55,28 @@ public class NettyClientConnect {
     }
 
     private void connectToServerName(NettyClientAction nettyClientAction) {
-        List<String> uriList = new ArrayList<>();
-        List<ServiceInstance> instances = discoveryClient.getInstances(nettyClientProperties.getServiceName());
-        if (isNotEmpty(instances)) {
-            instances.forEach(instance -> {
-                String sb = instance.getUri().toString();
-                uriList.add(sb);
-            });
+        if (isNull(nettyClientAction)) {
+            return;
         }
-        if (isNotEmpty(uriList)) {
-            AtomicInteger index = new AtomicInteger(-1);
-            uriList.forEach(uri -> Thread.ofVirtual().start(() -> {
+        NettyClientManager.setNettyClientAction(nettyClientAction);
+        if (isBlank(nettyClientProperties.getServiceName())) {
+            return;
+        }
+        List<ServiceInstance> instances = discoveryClient.getInstances(nettyClientProperties.getServiceName());
+        if (isEmpty(instances)) {
+            return;
+        }
+        Set<String> usedUriList = new HashSet<>();
+        instances.forEach(instance -> usedUriList.add(instance.getUri().toString()));
+        if (isNotEmpty(NettyClientManager.getServiceUriList())) {
+            usedUriList.removeAll(NettyClientManager.getServiceUriList());
+            if (isEmpty(usedUriList)) {
+                return;
+            }
+        }
+        if (isNotEmpty(usedUriList)) {
+            usedUriList.forEach(uri -> Thread.ofVirtual().start(() -> {
                 try {
-                    index.getAndIncrement();
                     connectToClient(nettyClientAction, uri);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
@@ -76,6 +90,14 @@ public class NettyClientConnect {
         client.init();
         client.connect();
         client.shutdown();
+    }
+
+    /**
+     * 定时执行，防止修改了配置文件
+     */
+    @Scheduled(fixedDelay = 10000, initialDelay = 1000)
+    public void healthCheck() {
+        connectToServerName(NettyClientManager.getNettyClientAction());
     }
 
 }
