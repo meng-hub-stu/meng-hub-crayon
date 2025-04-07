@@ -1,9 +1,22 @@
 package com.crayon.netty.client.websocket.server;
 
-import com.crayon.netty.client.websocket.config.NettyClientMessage;
+import com.crayon.netty.client.websocket.config.WebSocketClientProperties;
+import com.crayon.netty.client.websocket.config.WebsocketClientAction;
+import com.crayon.netty.client.websocket.config.WebsocketClientManager;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
-import java.net.URI;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
+import static com.baomidou.mybatisplus.core.toolkit.CollectionUtils.isNotEmpty;
+import static com.baomidou.mybatisplus.core.toolkit.ObjectUtils.isNull;
+import static org.springframework.util.CollectionUtils.isEmpty;
 
 /**
  * TODO
@@ -12,25 +25,52 @@ import java.util.List;
  * @Author Administrator
  * @Date 2025/3/28 21:48
  **/
+@Slf4j
+@Component
+@RequiredArgsConstructor
+@Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class WebSocketConnect {
-    public static void main(String[] args) throws Exception {
-        //可能会有多个地址需要连接，这里可以用线程池来连接
-        List<URI> uris = List.of(new URI("ws://127.0.0.1:12003/ws/message"));
-        NettyClientMessage nettyClientMessage = data -> {
-            System.out.println("Received message: " + data);
-        };
-        uris.forEach(uri -> Thread.ofVirtual().start(() -> {
-            try {
-                WebSocketServer client = new WebSocketServer(uri, nettyClientMessage);
-                client.init();
-                client.connect();
-                client.shutdown();
-            } catch (Exception e) {
-                throw new RuntimeException(e);
+
+    private final WebSocketClientProperties webSocketClientProperties;
+
+    public void connectServer(WebsocketClientAction websocketClientAction) {
+        if (isNull(websocketClientAction)) {
+            return;
+        }
+        WebsocketClientManager.setWebsocketClientAction(websocketClientAction);
+        List<WebSocketClientProperties.WebSocketUrl> webSocketUrlList = webSocketClientProperties.getWebSocketUrlList();
+        if (isEmpty(webSocketUrlList)) {
+            return;
+        }
+        Set<String> usedUriList = new HashSet<>();
+        webSocketUrlList.forEach(webSocketUrl -> usedUriList.add(webSocketUrl.getUrl() + ":" + webSocketUrl.getPort() + webSocketUrl.getPath()));
+        if (isNotEmpty(WebsocketClientManager.getServiceUriList())) {
+            usedUriList.removeAll(WebsocketClientManager.getServiceUriList());
+            if (isEmpty(usedUriList)) {
+                return;
             }
-        }));
-        //主线程等待
-        Thread.currentThread().join();
+        }
+        if (isNotEmpty(usedUriList)) {
+            usedUriList.forEach(uri -> Thread.ofVirtual().start(() -> {
+                try {
+                    connectToClient(websocketClientAction, uri);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }));
+        }
+    }
+
+    private void connectToClient(WebsocketClientAction websocketClientAction, String uri) throws Exception {
+        WebSocketServer client = new WebSocketServer(websocketClientAction, uri, webSocketClientProperties);
+        client.init();
+        client.connect();
+        client.shutdown();
+    }
+
+    @Scheduled(fixedDelay = 10000, initialDelay = 1000)
+    public void refreshCheck() {
+        connectServer(WebsocketClientManager.getWebsocketClientAction());
     }
 
 }

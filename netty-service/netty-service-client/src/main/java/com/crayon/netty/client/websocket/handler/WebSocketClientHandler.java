@@ -1,7 +1,8 @@
 package com.crayon.netty.client.websocket.handler;
 
+import com.crayon.netty.client.tcp.config.NettyClientManager;
+import com.crayon.netty.client.websocket.config.WebsocketClientAction;
 import com.crayon.netty.client.websocket.server.WebSocketServer;
-import com.crayon.netty.client.websocket.config.NettyClientMessage;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.FullHttpResponse;
@@ -11,6 +12,8 @@ import io.netty.handler.codec.http.websocketx.WebSocketClientHandshaker;
 import io.netty.handler.codec.http.websocketx.WebSocketHandshakeException;
 import lombok.extern.slf4j.Slf4j;
 
+import java.net.URI;
+
 /**
  * @author Mengdl
  * @date 2025/03/24
@@ -18,22 +21,24 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class WebSocketClientHandler extends SimpleChannelInboundHandler<Object> {
 
+    private final URI uri;
     private final WebSocketClientHandshaker handshake;
-    private final NettyClientMessage nettyClientMessage;
+    private final WebsocketClientAction websocketClientAction;
     private final WebSocketServer webSocketServer;
 
-    public WebSocketClientHandler(WebSocketClientHandshaker handshake,
-                                  NettyClientMessage nettyClientMessage,
+    public WebSocketClientHandler(URI uri, WebSocketClientHandshaker handshake,
+                                  WebsocketClientAction websocketClientAction,
                                   WebSocketServer webSocketServer) {
+        this.uri = uri;
         this.handshake = handshake;
-        this.nettyClientMessage = nettyClientMessage;
+        this.websocketClientAction = websocketClientAction;
         this.webSocketServer = webSocketServer;
     }
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         // 发起握手请求
-        log.info("Handshake started");
+        log.info("channelActive channelId: {}", ctx.channel().id());
         handshake.handshake(ctx.channel());
     }
 
@@ -56,7 +61,7 @@ public class WebSocketClientHandler extends SimpleChannelInboundHandler<Object> 
         // 处理WebSocket帧消息
         if (msg instanceof TextWebSocketFrame) {
             TextWebSocketFrame textFrame = (TextWebSocketFrame) msg;
-            nettyClientMessage.message(textFrame.text());
+            websocketClientAction.act(textFrame.text());
         } else if (msg instanceof CloseWebSocketFrame) {
             System.out.println("Connection closed by server");
             ctx.close();
@@ -65,12 +70,22 @@ public class WebSocketClientHandler extends SimpleChannelInboundHandler<Object> 
 
     @Override
     public void channelRegistered(ChannelHandlerContext ctx) throws Exception {
+        log.info("channelRegistered channelId: {}", ctx.channel().id());
         super.channelRegistered(ctx);
     }
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+        log.info("channelInactive channelId: {}", ctx.channel().id());
+        NettyClientManager.getServiceUriList().remove(uri.toString());
         webSocketServer.reconnect();
+    }
+
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        log.info("exceptionCaught channelId: {}", ctx.channel().id());
+        NettyClientManager.getServiceUriList().remove(uri.toString());
+        super.exceptionCaught(ctx, cause);
     }
 
 }

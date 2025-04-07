@@ -1,4 +1,4 @@
-package com.crayon.netty.client.tcp.config;
+package com.crayon.netty.client.websocket.config;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
@@ -8,11 +8,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
  */
 @Schema(description = "函数编程接收消息")
 @FunctionalInterface
-public interface NettyClientAction {
-    /**
-     * 回调函数
-     *
-     * @param data 数据
-     */
+public interface WebsocketClientAction {
+
     void act(String data);
+
 }

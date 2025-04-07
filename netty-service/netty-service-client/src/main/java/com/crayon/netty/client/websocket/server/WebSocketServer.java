@@ -1,6 +1,8 @@
 package com.crayon.netty.client.websocket.server;
 
-import com.crayon.netty.client.websocket.config.NettyClientMessage;
+import com.crayon.netty.client.websocket.config.WebSocketClientProperties;
+import com.crayon.netty.client.websocket.config.WebsocketClientAction;
+import com.crayon.netty.client.websocket.config.WebsocketClientManager;
 import com.crayon.netty.client.websocket.handler.WebSocketClientHandler;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
@@ -17,6 +19,7 @@ import io.netty.handler.logging.LoggingHandler;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 
 /**
  * @author Mengdl
@@ -25,16 +28,17 @@ import java.net.URI;
 @Slf4j
 public class WebSocketServer {
 
+    private final WebsocketClientAction websocketClientAction;
     private final URI uri;
-    private final NettyClientMessage nettyClientMessage;
     private Bootstrap bootstrap;
     private final EventLoopGroup group = new NioEventLoopGroup();
+    private final WebSocketClientProperties webSocketClientProperties;
     private Integer retryCount = 0;
-    private final Integer retryMax = 3;
 
-    public WebSocketServer(URI uri, NettyClientMessage nettyClientMessage) {
-        this.uri = uri;
-        this.nettyClientMessage = nettyClientMessage;
+    public WebSocketServer(WebsocketClientAction websocketClientAction, String uri, WebSocketClientProperties webSocketClientProperties) throws URISyntaxException {
+        this.websocketClientAction = websocketClientAction;
+        this.uri = new URI(uri);
+        this.webSocketClientProperties = webSocketClientProperties;
     }
 
     public void init() throws Exception {
@@ -50,22 +54,16 @@ public class WebSocketServer {
                         pipeline.addLast(new HttpClientCodec());
                         // 聚合HTTP报文为FullHttpRequest/Response
                         pipeline.addLast(new HttpObjectAggregator(65536));
-//                        pipeline.addLast(new WebSocketServerProtocolHandler(
-//                                "uri",
-//                                "webSocket",
-//                                true,
-//                                65536 * 10,
-//                                false,
-//                                true));
                         // WebSocket协议处理器
                         pipeline.addLast(new WebSocketClientHandler(
+                                uri,
                                 WebSocketClientHandshakerFactory.newHandshaker(
                                         uri,
                                         WebSocketVersion.V13,
                                         null,
                                         false,
                                         new DefaultHttpHeaders()),
-                                nettyClientMessage,
+                                websocketClientAction,
                                 WebSocketServer.this
                         ));
                     }
@@ -81,6 +79,8 @@ public class WebSocketServer {
         future.addListener((ChannelFutureListener) f -> {
             if (f.isSuccess()) {
                 System.out.println("Connected to WebSocket server");
+                //连接成功之后添加到连接管理器中
+                WebsocketClientManager.getServiceUriList().add(uri.toString());
             } else {
                 System.err.println("Connection failed: " + f.cause());
             }
@@ -90,14 +90,14 @@ public class WebSocketServer {
     }
 
     public void reconnect() {
-        if (retryCount > retryMax) {
+        if (retryCount > webSocketClientProperties.getMaxRetryConnectCount()) {
             log.error("重连失败，已达最大重试次数");
             return;
         }
         retryCount++;
         try {
-            log.info("retry connect {} (尝试 {}/{} 在{} ms后)...", uri, retryCount, retryMax, 3000);
-            Thread.sleep(3000);
+            log.info("retry connect {} (尝试 {}/{} 在{} ms后)...", uri, retryCount, webSocketClientProperties.getMaxRetryConnectCount(), webSocketClientProperties.getWaitTimeReconnect());
+            Thread.sleep(webSocketClientProperties.getWaitTimeReconnect());
             connect();
         } catch (InterruptedException e) {
             log.error("尝试重新连接中断，异常:{}", e.getMessage());

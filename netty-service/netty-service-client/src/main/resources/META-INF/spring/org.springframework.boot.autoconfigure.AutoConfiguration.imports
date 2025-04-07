@@ -1,2 +1,4 @@
 com.crayon.netty.client.tcp.config.NettyClientProperties
 com.crayon.netty.client.tcp.server.NettyClientConnect
+com.crayon.netty.client.websocket.config.WebSocketClientProperties
+com.crayon.netty.client.websocket.server.WebSocketConnect
