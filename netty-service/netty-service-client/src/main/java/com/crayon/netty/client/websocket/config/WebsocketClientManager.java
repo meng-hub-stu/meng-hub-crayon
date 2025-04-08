@@ -22,4 +22,16 @@ public class WebsocketClientManager {
     @Setter
     private static Set<String> serviceUriList = new HashSet<>();
 
+    public static void addUri(String serviceUri) {
+        WebsocketClientManager.getServiceUriList().add(serviceUri);
+    }
+
+    public static void addUriList(Set<String> serviceUriList) {
+        WebsocketClientManager.getServiceUriList().addAll(serviceUriList);
+    }
+
+    public static void removeUri(String serviceUri) {
+        WebsocketClientManager.getServiceUriList().remove(serviceUri);
+    }
+
 }

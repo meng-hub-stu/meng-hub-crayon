@@ -80,7 +80,8 @@ public class WebSocketServer {
             if (f.isSuccess()) {
                 System.out.println("Connected to WebSocket server");
                 //连接成功之后添加到连接管理器中
-                WebsocketClientManager.getServiceUriList().add(uri.toString());
+//                WebsocketClientManager.getServiceUriList().add(uri.toString());
+                WebsocketClientManager.addUri(uri.toString());
             } else {
                 System.err.println("Connection failed: " + f.cause());
             }
