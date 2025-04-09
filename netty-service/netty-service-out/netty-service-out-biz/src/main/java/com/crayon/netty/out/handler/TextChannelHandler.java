@@ -52,7 +52,9 @@ public class TextChannelHandler extends SimpleChannelInboundHandler<TextWebSocke
         Channel channel = ctx.channel();
         //不同的通道可以进行设置一下
         channel.attr(NettyChannelManager.getSTUDENT_KEY()).set("123");
-        NettyChannelManager.addChannel(ctx.channel());
+        //这里设置一下了
+        String serverId = ctx.channel().id().asLongText();
+        NettyChannelManager.addChannel(ctx.channel(), serverId);
     }
 
 }

@@ -6,7 +6,6 @@ import com.crayon.netty.out.config.NettyServerProperties;
 import com.crayon.netty.out.entity.MessageVo;
 import com.crayon.netty.out.netty.NettyChannelManager;
 import io.netty.channel.Channel;
-import io.netty.channel.ChannelId;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -45,7 +44,7 @@ public class MessageRunner implements ApplicationRunner {
                 }
             }
             //这里可以设置延时推送
-            for (Map.Entry<ChannelId, List<Channel>> listEntry : NettyChannelManager.getCHANNEL_GROUP_MAP().entrySet()) {
+            for (Map.Entry<String, List<Channel>> listEntry : NettyChannelManager.getCHANNEL_GROUP_MAP().entrySet()) {
                 List<Channel> channels = listEntry.getValue();
                 channels.forEach(channel -> {
                     channel.writeAndFlush(new TextWebSocketFrame("out 转发" + data));
