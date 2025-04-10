@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.nio.charset.StandardCharsets;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
 /**
  * @author Mengdl
@@ -34,6 +36,18 @@ public class TestLogController {
         log.info("这是一行info日志,body:{}", body);
         Student student = JSON.parseObject(body, Student.class);
         return student;
+    }
+
+    public static void main(String[] args) {
+
+        ZonedDateTime nowInMoscow = ZonedDateTime.now();
+        System.out.println(nowInMoscow.getOffset());
+        System.out.println(nowInMoscow.getOffset().getTotalSeconds() / 3600);
+
+        ZoneId currentZone = ZoneId.systemDefault();
+        System.out.println(currentZone.getId());
+        System.out.println(currentZone.getId());
+
     }
 
 }

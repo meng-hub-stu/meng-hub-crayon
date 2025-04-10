@@ -91,6 +91,8 @@ public class NettyClientServer {
                 log.error("重连失败:{}", e.getMessage());
                 reconnect();
             }
+        } else {
+            shutdown();
         }
     }
 

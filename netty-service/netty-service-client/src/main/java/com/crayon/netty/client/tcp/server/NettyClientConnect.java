@@ -89,7 +89,7 @@ public class NettyClientConnect {
         NettyClientServer client = new NettyClientServer(nettyClientAction, url, nettyClientProperties);
         client.init();
         client.connect();
-        client.shutdown();
+//        client.shutdown();
     }
 
     /**

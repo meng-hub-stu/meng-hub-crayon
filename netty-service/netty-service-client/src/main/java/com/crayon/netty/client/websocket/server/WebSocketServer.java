@@ -94,6 +94,8 @@ public class WebSocketServer {
         if (retryCount > webSocketClientProperties.getMaxRetryConnectCount()) {
             log.error("重连失败，已达最大重试次数");
             return;
+        } else {
+            shutdown();
         }
         retryCount++;
         try {
