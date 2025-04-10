@@ -65,7 +65,7 @@ public class WebSocketConnect {
         WebSocketServer client = new WebSocketServer(websocketClientAction, uri, webSocketClientProperties);
         client.init();
         client.connect();
-        client.shutdown();
+//        client.shutdown();
     }
 
     @Scheduled(fixedDelay = 10000, initialDelay = 1000)
