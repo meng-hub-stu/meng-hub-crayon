@@ -34,6 +34,9 @@ public class WebSocketConnect {
     private final WebSocketClientProperties webSocketClientProperties;
 
     public void connectServer(WebsocketClientAction websocketClientAction) {
+        if (WebsocketClientManager.getRECONNECT()) {
+            return ;
+        }
         if (isNull(websocketClientAction)) {
             return;
         }

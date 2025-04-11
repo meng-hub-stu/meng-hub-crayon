@@ -22,6 +22,10 @@ public class WebsocketClientManager {
     @Setter
     private static Set<String> serviceUriList = new HashSet<>();
 
+    @Getter
+    @Setter
+    private static Boolean RECONNECT = false;
+
     public static void addUri(String serviceUri) {
         WebsocketClientManager.getServiceUriList().add(serviceUri);
     }
