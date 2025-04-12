@@ -1,5 +1,6 @@
 package com.crayon.student.service.impl;
 
+import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.crayon.common.core.util.IStatus;
 import com.crayon.common.core.util.R;
@@ -13,6 +14,7 @@ import com.crayon.student.service.StudentService;
 import com.crayon.teacher.entity.Teacher;
 import com.crayon.teacher.feign.TeacherFeignClient;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import static com.alibaba.fastjson2.JSON.copyTo;
@@ -23,6 +25,7 @@ import static com.alibaba.fastjson2.JSON.copyTo;
  */
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> implements StudentService {
 
     private final TeacherFeignClient teacherFeignClient;
@@ -36,6 +39,7 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> impl
         if (teacherR.isOk() && teacherR.getData() != null) {
             resp.setTeacherResp(copyTo(teacherR.getData(), TeacherResp.class));
         }
+        log.info(JSON.toJSONString(resp));
         //事务完成之后通知
         noticeTransaction.transMessage(consumer -> {
             System.out.println("你好");

@@ -15,7 +15,7 @@ import java.util.concurrent.Executors;
  * @author Mengdl
  * @date 2025/03/12
  */
-@Component
+//@Component
 public class StudentConfigure extends WebMvcConfigurationSupport {
 
     @Override
