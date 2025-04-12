@@ -1,29 +1,31 @@
 package com.crayon.netty.out.handler;
 
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.HttpHeaders;
-import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler.HandshakeComplete;
 import io.netty.util.AttributeKey;
 
 /**
  * @author Mengdl
  * @date 2025/04/11
  */
-public class AuthHandler extends SimpleChannelInboundHandler<HandshakeComplete> {
+public class AuthHandler extends ChannelInboundHandlerAdapter {
     private static final AttributeKey<String> AUTH_TOKEN = AttributeKey.valueOf("authToken");
 
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, HandshakeComplete msg) throws Exception {
-        HttpHeaders entries = msg.requestHeaders();
-        String authToken = entries.get("Authorization");
-        if (!isValidAuthToken(authToken)) {
-            ctx.close();
-            return;
+    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+        if (msg instanceof FullHttpRequest request) {
+            HttpHeaders headers = request.headers();
+            String token = headers.get("Authorization");
+            if (!isValidAuthToken(token)) {
+                ctx.close();
+                return;
+            }
+            ctx.fireChannelRead(request.retain());
+        } else {
+            ctx.fireChannelRead(msg);
         }
-
-        ctx.channel().attr(AUTH_TOKEN).set(authToken);
-        ctx.fireChannelRead(msg);
     }
 
     private boolean isValidAuthToken(String authToken) {
@@ -31,4 +33,5 @@ public class AuthHandler extends SimpleChannelInboundHandler<HandshakeComplete> 
         // 假设有效的Token是 "Bearer your_valid_token_here"
         return "Bearer your_valid_token_here".equals(authToken);
     }
+
 }
