@@ -1,10 +1,14 @@
-package com.crayon.common.data.fastjason;
+package com.crayon.common.core.fastjason;
+
 import cn.hutool.core.date.DatePattern;
 import com.alibaba.fastjson2.JSONReader;
 import com.alibaba.fastjson2.JSONWriter;
 import com.alibaba.fastjson2.support.config.FastJsonConfig;
 import com.alibaba.fastjson2.support.spring6.http.converter.FastJsonHttpMessageConverter;
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.format.datetime.standard.DateTimeFormatterRegistrar;
 import org.springframework.http.MediaType;
@@ -24,10 +28,14 @@ import java.util.List;
  * @Date 2025/4/12 21:08
  **/
 @Configuration
+@RequiredArgsConstructor
 public class Fastjson2Configuration implements WebMvcConfigurer {
 
-    @Override
-    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+    private final SimpleValueFilter simpleValueFilter;
+
+    @Bean
+    @Primary
+    public HttpMessageConverter httpMessageConverter() {
         // 创建FastJson消息转换器
         FastJsonHttpMessageConverter converter = new FastJsonHttpMessageConverter();
         List<MediaType> supportedMediaTypes = new ArrayList<>();
@@ -36,7 +44,7 @@ public class Fastjson2Configuration implements WebMvcConfigurer {
         // 创建配置类
         FastJsonConfig fastJsonConfig = new FastJsonConfig();
         // 自定义过滤器,数据脱敏过滤器
-//        fastJsonConfig.setWriterFilters(simpleValueFilter, sensitiveSerialize);
+        fastJsonConfig.setWriterFilters(simpleValueFilter);
         fastJsonConfig.setWriterFeatures(
                 // 格式化输出
                 JSONWriter.Feature.PrettyFormat,
@@ -60,7 +68,7 @@ public class Fastjson2Configuration implements WebMvcConfigurer {
         // fastJsonConfig.setJSONB(true);
         // 设置FastJson配置
         converter.setFastJsonConfig(fastJsonConfig);
-        converters.add(converter);
+        return converter;
     }
 
     @Override

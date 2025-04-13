@@ -1,3 +1,2 @@
 com.crayon.common.data.transaction.NoticeTransaction
 com.crayon.common.data.mybatis.MybatisPlusConfiguration
-com.crayon.common.data.fastjason.Fastjson2Configuration

@@ -35,7 +35,7 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> impl
     public StudentResp detail(Long id) {
         Student student = this.getById(id);
         StudentResp resp = copyTo(student, StudentResp.class);
-        R<Teacher> teacherR = teacherFeignClient.getInfo(id);
+        R<Teacher> teacherR = teacherFeignClient.getInfo(1898539391580446723L);
         if (teacherR.isOk() && teacherR.getData() != null) {
             resp.setTeacherResp(copyTo(teacherR.getData(), TeacherResp.class));
         }
