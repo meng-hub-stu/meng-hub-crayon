@@ -23,3 +23,9 @@ hy:
 netty:
   client:
     service-name: netty-server-core-websocket
+  websocket:
+    client:
+      webSocketUrlList:
+        - { url: ws://127.0.0.1, port: 12003, path: /ws/message }
+      waitTimeReconnect: 5000
+      maxRetryConnectCount: 3

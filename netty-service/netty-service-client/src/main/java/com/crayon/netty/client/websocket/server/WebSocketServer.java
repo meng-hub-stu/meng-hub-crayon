@@ -32,12 +32,14 @@ public class WebSocketServer {
     private final URI uri;
     private Bootstrap bootstrap;
     private final EventLoopGroup group = new NioEventLoopGroup();
+    private final DefaultHttpHeaders defaultHttpHeaders;
     private final WebSocketClientProperties webSocketClientProperties;
     private Integer retryCount = 0;
 
-    public WebSocketServer(WebsocketClientAction websocketClientAction, String uri, WebSocketClientProperties webSocketClientProperties) throws URISyntaxException {
+    public WebSocketServer(WebsocketClientAction websocketClientAction, String uri, DefaultHttpHeaders defaultHttpHeaders, WebSocketClientProperties webSocketClientProperties) throws URISyntaxException {
         this.websocketClientAction = websocketClientAction;
         this.uri = new URI(uri);
+        this.defaultHttpHeaders = defaultHttpHeaders;
         this.webSocketClientProperties = webSocketClientProperties;
     }
 
@@ -62,7 +64,7 @@ public class WebSocketServer {
                                         WebSocketVersion.V13,
                                         null,
                                         false,
-                                        new DefaultHttpHeaders()),
+                                        defaultHttpHeaders == null ? new DefaultHttpHeaders() : defaultHttpHeaders),
                                 websocketClientAction,
                                 WebSocketServer.this
                         ));

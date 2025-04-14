@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -16,10 +16,10 @@ import java.util.concurrent.Executors;
  * @date 2025/03/12
  */
 @Component
-public class StudentConfigure extends WebMvcConfigurationSupport {
+public class StudentConfigure implements WebMvcConfigurer {
 
     @Override
-    protected void addInterceptors(InterceptorRegistry registry) {
+    public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new CustomLogInterceptor());
         //可以具体制定哪些需要拦截，哪些不拦截，其实也可以使用自定义注解更灵活完成
         // .addPathPatterns("/**")

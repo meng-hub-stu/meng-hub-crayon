@@ -4,6 +4,7 @@ import com.crayon.netty.client.tcp.config.NettyClientAction;
 import com.crayon.netty.client.tcp.server.NettyClientConnect;
 import com.crayon.netty.client.websocket.config.WebsocketClientAction;
 import com.crayon.netty.client.websocket.server.WebSocketConnect;
+import io.netty.handler.codec.http.DefaultHttpHeaders;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;
@@ -36,7 +37,9 @@ public class MessageRunner implements ApplicationRunner {
         WebsocketClientAction websocketClientAction = (String data) -> {
             log.info("websocket receive message:{}", data);
         };
-        webSocketConnect.connectServer(websocketClientAction);
+        DefaultHttpHeaders defaultHttpHeaders = new DefaultHttpHeaders();
+        defaultHttpHeaders.add("Authorization", "Bearer your_valid_token_here");
+        webSocketConnect.connectServer(websocketClientAction, defaultHttpHeaders);
     }
 
 }

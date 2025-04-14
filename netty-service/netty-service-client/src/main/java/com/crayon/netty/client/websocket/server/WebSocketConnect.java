@@ -3,6 +3,7 @@ package com.crayon.netty.client.websocket.server;
 import com.crayon.netty.client.websocket.config.WebSocketClientProperties;
 import com.crayon.netty.client.websocket.config.WebsocketClientAction;
 import com.crayon.netty.client.websocket.config.WebsocketClientManager;
+import io.netty.handler.codec.http.DefaultHttpHeaders;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -33,9 +34,9 @@ public class WebSocketConnect {
 
     private final WebSocketClientProperties webSocketClientProperties;
 
-    public void connectServer(WebsocketClientAction websocketClientAction) {
+    public void connectServer(WebsocketClientAction websocketClientAction, DefaultHttpHeaders defaultHttpHeaders) {
         if (WebsocketClientManager.getRECONNECT()) {
-            return ;
+            return;
         }
         if (isNull(websocketClientAction)) {
             return;
@@ -56,7 +57,7 @@ public class WebSocketConnect {
         if (isNotEmpty(usedUriList)) {
             usedUriList.forEach(uri -> Thread.ofVirtual().start(() -> {
                 try {
-                    connectToClient(websocketClientAction, uri);
+                    connectToClient(websocketClientAction, uri, defaultHttpHeaders);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -64,16 +65,18 @@ public class WebSocketConnect {
         }
     }
 
-    private void connectToClient(WebsocketClientAction websocketClientAction, String uri) throws Exception {
-        WebSocketServer client = new WebSocketServer(websocketClientAction, uri, webSocketClientProperties);
+    private void connectToClient(WebsocketClientAction websocketClientAction, String uri, DefaultHttpHeaders defaultHttpHeaders) throws Exception {
+        WebSocketServer client = new WebSocketServer(websocketClientAction, uri, defaultHttpHeaders, webSocketClientProperties);
         client.init();
         client.connect();
 //        client.shutdown();
     }
 
-    @Scheduled(fixedDelay = 10000, initialDelay = 1000)
+    @Scheduled(fixedDelay = 100000, initialDelay = 100000)
     public void refreshCheck() {
-        connectServer(WebsocketClientManager.getWebsocketClientAction());
+        DefaultHttpHeaders defaultHttpHeaders = new DefaultHttpHeaders();
+        defaultHttpHeaders.add("Authorization", "Bearer your_valid_token_here");
+        connectServer(WebsocketClientManager.getWebsocketClientAction(), defaultHttpHeaders);
     }
 
 }

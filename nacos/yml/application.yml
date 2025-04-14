@@ -34,6 +34,29 @@ spring:
       max-file-size: 100MB
       max-request-size: 100MB
 
+  cloud:
+    sentinel:
+      transport:
+        dashboard: localhost:8080
+        port: 8909
+    openfeign:
+      client:
+        config:
+          default:
+            logger-level: full
+      sentinel:
+        enabled: true
+      okhttp:
+        enabled: true
+      httpclient:
+        enabled: false
+        connection-timeout: 20000
+      compression:
+        request:
+          enabled: true
+        response:
+          enabled: true
+
 # mybatis-plus 配置
 mybatis-plus:
   tenant-enable: ture

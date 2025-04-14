@@ -17,7 +17,7 @@ public class TestWebSocketConnect {
         };
         uris.forEach(uri -> Thread.ofVirtual().start(() -> {
             try {
-                WebSocketServer client = new WebSocketServer(websocketClientAction, uri, null);
+                WebSocketServer client = new WebSocketServer(websocketClientAction, uri, null, null);
                 client.init();
                 client.connect();
                 client.shutdown();

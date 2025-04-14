@@ -49,7 +49,7 @@ public class WebSocketClientHandler extends SimpleChannelInboundHandler<Object> 
                 handshake.finishHandshake(ctx.channel(), (FullHttpResponse) msg);
                 System.out.println("Handshake complete!");
                 // 握手成功后发送测试消息（可选）
-                TextWebSocketFrame frame = new TextWebSocketFrame("你好啊");
+                TextWebSocketFrame frame = new TextWebSocketFrame("客户端连接服务端");
                 ctx.channel().writeAndFlush(frame);
             } catch (WebSocketHandshakeException e) {
                 System.err.println("Handshake failed: " + e.getMessage());
