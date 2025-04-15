@@ -51,6 +51,9 @@
         <skywalking.version>9.3.0</skywalking.version>
         <rocketmq.version>5.0.5</rocketmq.version>
         <mybatis-plus.version>3.5.10.1</mybatis-plus.version>
+        <maven.compiler.version>3.11.0</maven.compiler.version>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
     </properties>
 
     <!--声明依赖    -->
@@ -372,6 +375,17 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>${spring-boot.version}</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven.compiler.version}</version>
+                <configuration>
+                    <target>${maven.compiler.target}</target>
+                    <source>${maven.compiler.source}</source>
+                    <encoding>UTF-8</encoding>
+                    <parameters>true</parameters>
+                </configuration>
             </plugin>
         </plugins>
     </build>

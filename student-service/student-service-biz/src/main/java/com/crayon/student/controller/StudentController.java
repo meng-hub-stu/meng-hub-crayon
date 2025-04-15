@@ -7,7 +7,8 @@ import com.crayon.student.entity.model.Student;
 import com.crayon.student.entity.req.StudentReq;
 import com.crayon.student.entity.resp.StudentResp;
 import com.crayon.student.service.StudentService;
-import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
@@ -25,48 +26,49 @@ import java.time.LocalDateTime;
  **/
 @RestController
 @RequiredArgsConstructor
-@Validated
 @RequestMapping(value = "/student")
 @Slf4j
+@Tag(description = "Student", name = "学生管理")
+@Validated
 public class StudentController {
 
     private final StudentService studentService;
 
     @GetMapping(value = "/page")
-    @Schema(name = "分页", description = "id获取详情")
+    @Operation(summary = "分页", description = "id获取详情")
     public R<Page<Student>> page(Page<Student> page) {
         return R.ok(studentService.page(page));
     }
 
     @GetMapping(value = "/{id}")
-    @Schema(name = "详情", description = "id获取详情")
+    @Operation(summary = "详情", description = "id获取详情")
     public R<StudentResp> detail(@PathVariable(value = "id") Long id) {
         return R.ok(studentService.detail(id));
     }
 
     @PostMapping
-    @Schema(name = "保存", description = "保存学生数据")
+    @Operation(summary = "保存", description = "保存学生数据")
     public R<String> save(@Validated @RequestBody Student student) {
         studentService.save(student);
         return R.ok(student.getId().toString());
     }
 
     @PutMapping
-    @Schema(name = "更新", description = "更新学生数据")
+    @Operation(summary = "更新", description = "更新学生数据")
     public R<String> update(@Validated @RequestBody Student student) {
         studentService.updateById(student);
         return R.ok(student.getId().toString());
     }
 
     @DeleteMapping
-    @Schema(name = "删除", description = "删除学生数据")
+    @Operation(summary = "删除", description = "删除学生数据")
     public R<Boolean> del(@RequestParam Long id) {
         return R.ok(studentService.removeById(id));
     }
 
 
     @PostMapping(value = "/check")
-    @Schema(name = "check", description = "check学生数据")
+    @Operation(summary = "check", description = "check学生数据")
     public R<StudentResp> check(@RequestBody StudentReq req) {
 //        log.info("reqString:{}", JSON.toJSONString(req));
         StudentResp resp = new StudentResp();
@@ -74,6 +76,12 @@ public class StudentController {
         resp.setId(12345555L);
 //        log.info("respString:{}", JSON.toJSONString(resp));
         return R.ok(resp);
+    }
+
+    @GetMapping(value = "/checkParam")
+    @Operation(summary = "校验参数", description = "校验参数")
+    public R<String> checkParam(@RequestParam String accountName) {
+        return R.ok(accountName);
     }
 
 
