@@ -62,7 +62,7 @@ public class Fastjson2Configuration implements WebMvcConfigurer {
                 // 保留Map空的字段
                 JSONWriter.Feature.WriteMapNullValue
         );
-        fastJsonConfig.setReaderFeatures(JSONReader.Feature.SupportSmartMatch, JSONReader.Feature.FieldBased);
+        fastJsonConfig.setReaderFeatures(JSONReader.Feature.SupportSmartMatch/*, JSONReader.Feature.FieldBased*/);
         // 设置字符集
         fastJsonConfig.setCharset(StandardCharsets.UTF_8);
         // fastJsonConfig.setJSONB(true);

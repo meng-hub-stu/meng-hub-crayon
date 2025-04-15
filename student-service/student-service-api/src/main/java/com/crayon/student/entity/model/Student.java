@@ -1,7 +1,9 @@
 package com.crayon.student.entity.model;
 
+import com.alibaba.fastjson2.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.*;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
+import com.crayon.student.field.LongSerializer;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
@@ -29,6 +31,7 @@ public class Student extends Model<Student> {
 
     @TableId(type = IdType.ASSIGN_ID)
     @Schema(description = "id")
+    @JSONField(serializeUsing = LongSerializer.class)
     private Long id;
 
     @Schema(description = "学生编号")

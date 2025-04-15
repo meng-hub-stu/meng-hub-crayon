@@ -1,10 +1,14 @@
 package com.crayon.student;
 
+import com.alibaba.fastjson2.JSON;
 import com.crayon.student.entity.model.Student;
+import com.crayon.student.entity.req.StudentReq;
 import com.crayon.student.service.StudentService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @author Mengdl
@@ -27,6 +31,15 @@ public class TestStudent {
                 .weight(80)
                 .tenantId(1L).build();
         studentService.saveOrUpdate(student);
+    }
+
+    @Test
+    public void testLongDeserializer() {
+        String jsonString = "{\"id\": \"1234567890123456789\", \"name\": \"John\", \"sex\": \"Male\"}";
+        StudentReq studentReq = JSON.parseObject(jsonString, StudentReq.class);
+        assertEquals(Long.valueOf(1234567890123456789L), studentReq.getId());
+        assertEquals("John", studentReq.getName());
+        assertEquals("Male", studentReq.getSex());
     }
 
 }

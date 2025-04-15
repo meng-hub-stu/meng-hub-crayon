@@ -4,14 +4,17 @@ import cn.hutool.core.codec.Base64;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.crayon.common.core.util.R;
 import com.crayon.student.entity.model.Student;
+import com.crayon.student.entity.req.StudentReq;
 import com.crayon.student.entity.resp.StudentResp;
 import com.crayon.student.service.StudentService;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
 
 /**
  * TODO
@@ -24,6 +27,7 @@ import java.nio.charset.StandardCharsets;
 @RequiredArgsConstructor
 @Validated
 @RequestMapping(value = "/student")
+@Slf4j
 public class StudentController {
 
     private final StudentService studentService;
@@ -58,6 +62,18 @@ public class StudentController {
     @Schema(name = "删除", description = "删除学生数据")
     public R<Boolean> del(@RequestParam Long id) {
         return R.ok(studentService.removeById(id));
+    }
+
+
+    @PostMapping(value = "/check")
+    @Schema(name = "check", description = "check学生数据")
+    public R<StudentResp> check(@RequestBody StudentReq req) {
+//        log.info("reqString:{}", JSON.toJSONString(req));
+        StudentResp resp = new StudentResp();
+        resp.setCreateTime(LocalDateTime.now());
+        resp.setId(12345555L);
+//        log.info("respString:{}", JSON.toJSONString(resp));
+        return R.ok(resp);
     }
 
 
