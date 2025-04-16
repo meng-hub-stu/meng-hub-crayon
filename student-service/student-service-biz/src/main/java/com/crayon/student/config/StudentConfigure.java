@@ -1,12 +1,13 @@
 package com.crayon.student.config;
 
+import com.crayon.student.config.handler.CustomWebMvcConfigurer;
+import com.crayon.student.config.handler.LogInterceptor;
 import feign.Logger;
 import feign.RequestInterceptor;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -16,14 +17,19 @@ import java.util.concurrent.Executors;
  * @date 2025/03/12
  */
 @Component
-public class StudentConfigure implements WebMvcConfigurer {
+public class StudentConfigure {
 
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new CustomLogInterceptor());
-        //可以具体制定哪些需要拦截，哪些不拦截，其实也可以使用自定义注解更灵活完成
-        // .addPathPatterns("/**")
-        // .excludePathPatterns("/testxx.html");
+    @Bean
+    @ConditionalOnMissingBean(LogInterceptor.class)
+    public LogInterceptor customLogInterceptor() {
+        return new LogInterceptor();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(CustomWebMvcConfigurer.class)
+    @ConditionalOnBean(LogInterceptor.class)
+    public CustomWebMvcConfigurer customWebMvcConfigurer(LogInterceptor logInterceptor) {
+        return new CustomWebMvcConfigurer(logInterceptor);
     }
 
     @Bean
