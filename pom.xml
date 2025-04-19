@@ -13,9 +13,8 @@
 
     <modules>
         <module>hub-common</module>
-        <module>student-service</module>
-        <module>teacher-service</module>
-        <module>netty-service</module>
+        <module>hub-server</module>
+        <module>hub-netty</module>
     </modules>
 
     <properties>
