@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.crayon.dynamic.mapper.DynamicMapper">
+
+    <insert id='insertBatchDynamic'>
+        insert into ${tableName}
+        (id, name, create_time, update_time, del_flag) values
+        <foreach collection='list' item='item' separator=','>
+            (#{item.id}, #{item.name}, #{item.createTime}, #{item.updateTime}, #{item.delFlag})
+        </foreach>
+    </insert>
+
+    <insert id='insertDynamic'>
+        insert into man_test
+            (id, name, create_time, update_time, del_flag)
+            value (#{man.id}, #{man.name}, #{man.createTime}, #{man.updateTime}, #{man.delFlag})
+    </insert>
+
+    <select id="checkTableIsExists" resultType="integer">
+        SELECT COUNT(1) as reuslt
+        FROM INFORMATION_SCHEMA.TABLES
+        WHERE TABLE_SCHEMA = 'hub_crayon'
+          AND TABLE_NAME = concat('man_', #{tableName});
+    </select>
+
+</mapper>

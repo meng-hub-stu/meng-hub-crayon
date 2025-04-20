@@ -43,6 +43,7 @@ public class MybatisPlusConfiguration implements WebMvcConfigurer {
      * @return PigxDefaultDatascopeHandle
      */
     @Bean
+    @ConditionalOnMissingBean
     public MybatisPlusInterceptor mybatisPlusInterceptor(TenantLineInnerInterceptor tenantLineInnerInterceptor,
                                                          DeptScopeInterceptor deptScopeInterceptor) {
         MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
