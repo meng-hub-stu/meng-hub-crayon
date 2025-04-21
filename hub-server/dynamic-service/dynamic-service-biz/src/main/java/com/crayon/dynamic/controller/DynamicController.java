@@ -1,7 +1,7 @@
 package com.crayon.dynamic.controller;
 
 import com.crayon.common.core.util.R;
-import com.crayon.dynamic.entity.ManDynamic;
+import com.crayon.dynamic.entity.model.ManDynamic;
 import com.crayon.dynamic.service.DynamicService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

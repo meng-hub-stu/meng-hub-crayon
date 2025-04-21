@@ -1,6 +1,6 @@
 package com.crayon.dynamic;
 
-import com.crayon.dynamic.entity.ManDynamic;
+import com.crayon.dynamic.entity.model.ManDynamic;
 import com.crayon.dynamic.service.DynamicService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -27,9 +27,9 @@ public class TestDynamic {
     @Test
     public void testSave() {
         ManDynamic manDynamic = ManDynamic.builder()
-                .id(12L)
+                .id(3L)
                 .name("Mengdl")
-                .tableName("test.02")
+                .tableName("test.01")
                 .createTime(LocalDateTime.now())
                 .updateTime(LocalDateTime.now())
                 .delFlag(0)

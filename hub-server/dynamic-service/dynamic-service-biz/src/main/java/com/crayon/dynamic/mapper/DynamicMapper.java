@@ -1,6 +1,6 @@
 package com.crayon.dynamic.mapper;
 
-import com.crayon.dynamic.entity.ManDynamic;
+import com.crayon.dynamic.entity.model.ManDynamic;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

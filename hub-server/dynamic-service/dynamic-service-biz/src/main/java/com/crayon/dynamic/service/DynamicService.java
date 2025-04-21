@@ -1,6 +1,6 @@
 package com.crayon.dynamic.service;
 
-import com.crayon.dynamic.entity.ManDynamic;
+import com.crayon.dynamic.entity.model.ManDynamic;
 
 import java.util.List;
 
@@ -25,14 +25,6 @@ public interface DynamicService {
      * @return 结果
      */
     Boolean save(ManDynamic manDynamic);
-
-    /**
-     * 检查表是否存在
-     *
-     * @param tableName 表名
-     * @return 结果
-     */
-    Boolean checkTableIsExists(String tableName);
 
     /**
      * 新增数据

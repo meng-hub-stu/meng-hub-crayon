@@ -13,5 +13,8 @@
         <module>dynamic-service-api</module>
         <module>dynamic-service-biz</module>
     </modules>
+    <properties>
+        <lock4j.version>2.2.7</lock4j.version>
+    </properties>
 
 </project>

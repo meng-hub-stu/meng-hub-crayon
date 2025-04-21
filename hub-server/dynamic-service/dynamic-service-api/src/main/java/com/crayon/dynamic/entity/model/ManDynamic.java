@@ -1,8 +1,9 @@
-package com.crayon.dynamic.entity;
+package com.crayon.dynamic.entity.model;
 
 import com.baomidou.mybatisplus.annotation.*;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -15,7 +16,7 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
+@SuperBuilder
 @EqualsAndHashCode
 @Schema(description = "男士动态信息表")
 public class ManDynamic implements Serializable {
