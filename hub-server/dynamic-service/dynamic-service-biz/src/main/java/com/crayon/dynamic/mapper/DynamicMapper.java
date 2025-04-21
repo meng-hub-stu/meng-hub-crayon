@@ -15,23 +15,26 @@ public interface DynamicMapper {
 
     /**
      * 批量动态插入
+     *
      * @param tableName 表名
-     * @param dataList 数据内容
+     * @param dataList  数据内容
      * @return 结果
      */
     int insertBatchDynamic(@Param("tableName") String tableName, @Param("dataList") List<ManDynamic> dataList);
 
     /**
      * 动态插入
+     *
      * @param tableName 表名
-     * @param man 数据内容
+     * @param man       数据内容
      * @return 结果
      */
-    int insertDynamic(@Param("man") ManDynamic man);
+    int insertDynamic(@Param("tableName") String tableName, @Param("man") ManDynamic man);
 
 
     /**
      * 检查表存不存在
+     *
      * @param tableName 表名
      * @return 结果
      */

@@ -1,6 +1,5 @@
 package com.crayon.dynamic.service.impl;
 
-import com.crayon.dynamic.database.DynamicTableNameUtils;
 import com.crayon.dynamic.database.ManualDataSource;
 import com.crayon.dynamic.entity.ManDynamic;
 import com.crayon.dynamic.mapper.DynamicMapper;
@@ -10,6 +9,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+import static com.crayon.dynamic.database.DynamicTableNameUtils.getCreateTable;
+import static com.crayon.dynamic.database.DynamicTableNameUtils.getCurrentTable;
 
 /**
  * @author Mengdl
@@ -44,20 +46,17 @@ public class DynamicServiceImpl implements DynamicService {
 
     @Override
     public Boolean checkTableIsExists(String tableName) {
-        DynamicTableNameUtils.skip();
-        return dynamicMapper.checkTableIsExists(tableName) > 0;
+        return dynamicMapper.checkTableIsExists(getCreateTable(tableName)) > 0;
     }
 
     @Override
     public Boolean insertBatchDynamic(String tableName, List<ManDynamic> manDynamics) {
-        DynamicTableNameUtils.applyTable(tableName);
-        return dynamicMapper.insertBatchDynamic(tableName, manDynamics) > 0;
+        return dynamicMapper.insertBatchDynamic(getCurrentTable(tableName), manDynamics) > 0;
     }
 
     @Override
     public Boolean insertDynamic(String tableName, ManDynamic manDynamic) {
-        DynamicTableNameUtils.applyTable(tableName);
-        return dynamicMapper.insertDynamic(manDynamic) > 0;
+        return dynamicMapper.insertDynamic(getCurrentTable(tableName), manDynamic) > 0;
     }
 
 }

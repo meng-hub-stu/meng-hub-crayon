@@ -45,4 +45,12 @@ public class DynamicTableNameUtils {
         DYNAMIC_TABLE_NAME.remove();
     }
 
+    public static String getCurrentTable(String tableName) {
+        return "`" + getCreateTable(tableName) + "`";
+    }
+
+    public static String getCreateTable(String tableName) {
+        return DYNAMIC_TABLE_NAME_PREFIX + tableName;
+    }
+
 }

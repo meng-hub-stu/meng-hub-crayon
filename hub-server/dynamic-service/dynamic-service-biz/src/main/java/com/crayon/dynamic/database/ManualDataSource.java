@@ -2,6 +2,7 @@ package com.crayon.dynamic.database;
 
 import cn.hutool.db.Db;
 import cn.hutool.db.ds.simple.SimpleDataSource;
+import com.crayon.dynamic.constant.DynamicConstant;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
@@ -22,7 +23,7 @@ public class ManualDataSource {
 
     private static final String SQL = """
             CREATE TABLE
-            IF NOT EXISTS `man_%s` (
+            IF NOT EXISTS `%s` (
             		id BIGINT(64) NOT NULL COMMENT '主键',
             		name VARCHAR (16) DEFAULT NULL COMMENT '刻度',
             		table_name VARCHAR (16) DEFAULT NULL COMMENT '刻度',
@@ -40,7 +41,7 @@ public class ManualDataSource {
                     properties.getMysqlPwd()
             );
             Db db = Db.use(dataSource);
-            String format = String.format(SQL, tableName.toLowerCase());
+            String format = String.format(SQL, DynamicConstant.DYNAMIC_TABLE_NAME_PREFIX + tableName.toLowerCase());
             int execute = db.execute(format);
             log.info("create table success {}: {}", tableName, execute);
         } catch (SQLException e) {

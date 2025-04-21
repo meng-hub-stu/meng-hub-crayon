@@ -12,7 +12,7 @@
     </insert>
 
     <insert id='insertDynamic'>
-        insert into man_test
+        insert into ${tableName}
             (id, name, create_time, update_time, del_flag)
             value (#{man.id}, #{man.name}, #{man.createTime}, #{man.updateTime}, #{man.delFlag})
     </insert>
@@ -21,7 +21,7 @@
         SELECT COUNT(1) as reuslt
         FROM INFORMATION_SCHEMA.TABLES
         WHERE TABLE_SCHEMA = 'hub_crayon'
-          AND TABLE_NAME = concat('man_', #{tableName});
+          AND TABLE_NAME = #{tableName};
     </select>
 
 </mapper>

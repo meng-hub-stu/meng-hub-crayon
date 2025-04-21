@@ -27,9 +27,9 @@ public class TestDynamic {
     @Test
     public void testSave() {
         ManDynamic manDynamic = ManDynamic.builder()
-                .id(3L)
+                .id(12L)
                 .name("Mengdl")
-                .tableName("01")
+                .tableName("test.02")
                 .createTime(LocalDateTime.now())
                 .updateTime(LocalDateTime.now())
                 .delFlag(0)

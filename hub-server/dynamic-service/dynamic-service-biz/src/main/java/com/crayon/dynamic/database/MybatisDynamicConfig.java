@@ -8,10 +8,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 
-import java.util.Optional;
-
-import static com.crayon.dynamic.constant.DynamicConstant.DYNAMIC_TABLE_NAME_PREFIX;
-
 /**
  * @author Mengdl
  * @description mybatis动态数据源配置
@@ -32,10 +28,12 @@ public class MybatisDynamicConfig {
         interceptor.addInnerInterceptor(new OptimisticLockerInnerInterceptor());
         //动态表名
         DynamicTableNameInnerInterceptor dynamicTableNameInnerInterceptor = new DynamicTableNameInnerInterceptor();
-        dynamicTableNameInnerInterceptor.setTableNameHandler((sql, tableName) ->
-                Optional.ofNullable(DynamicTableNameUtils.getCurrentTable())
-                        .filter(t -> t.contains(DYNAMIC_TABLE_NAME_PREFIX))
-                        .orElse(tableName));
+        //需要重置一下表名
+        dynamicTableNameInnerInterceptor.setTableNameHandler((sql, tableName) -> tableName);
+//        dynamicTableNameInnerInterceptor.setTableNameHandler((sql, tableName) ->
+//                Optional.ofNullable(DynamicTableNameUtils.getCurrentTable())
+//                        .filter(t -> t.contains(DYNAMIC_TABLE_NAME_PREFIX))
+//                        .orElse(tableName));
         interceptor.addInnerInterceptor(dynamicTableNameInnerInterceptor);
         return interceptor;
     }
