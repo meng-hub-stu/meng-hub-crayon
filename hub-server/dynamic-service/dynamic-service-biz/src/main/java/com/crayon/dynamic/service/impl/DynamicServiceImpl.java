@@ -32,6 +32,19 @@ public class DynamicServiceImpl implements DynamicService {
     private final ManualDataSource manualDataSource;
 
     @Override
+    public ManDynamic detail(Long id) {
+        return dynamicMapper.selectById(id);
+    }
+    @Override
+    public ManDynamic detailMt4(Long id) {
+        return dynamicMapper.selectById(id);
+    }
+    @Override
+    public ManDynamic detailMt5(Long id) {
+        return dynamicMapper.selectById(id);
+    }
+
+    @Override
     public Boolean save(ManDynamic manDynamic) {
         String tableName = manDynamic.getTableName();
         manualDataSource.checkOrCreateTable(getDmlTable(tableName));

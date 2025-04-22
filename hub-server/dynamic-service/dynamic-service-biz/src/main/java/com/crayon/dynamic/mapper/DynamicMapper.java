@@ -3,6 +3,7 @@ package com.crayon.dynamic.mapper;
 import com.crayon.dynamic.entity.model.ManDynamic;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -39,5 +40,8 @@ public interface DynamicMapper {
      * @return 结果
      */
     int checkTableIsExists(@Param("tableName") String tableName);
+
+    @Select("select * from man_test where id = #{id}")
+    ManDynamic selectById(Long id);
 
 }

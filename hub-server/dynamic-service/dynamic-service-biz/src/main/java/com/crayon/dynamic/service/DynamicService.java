@@ -1,5 +1,6 @@
 package com.crayon.dynamic.service;
 
+import com.baomidou.dynamic.datasource.annotation.DS;
 import com.crayon.dynamic.entity.model.ManDynamic;
 
 import java.util.List;
@@ -43,5 +44,26 @@ public interface DynamicService {
      * @return 结果
      */
     Boolean insertDynamic(String tableName, ManDynamic manDynamic);
+
+    /**
+     * 查询数据
+     * @param id 主键
+     * @return 结果
+     */
+    ManDynamic detail(Long id);
+    /**
+     * 查询数据
+     * @param id 主键
+     * @return 结果
+     */
+    @DS("mt4")
+    ManDynamic detailMt4(Long id);
+    /**
+     * 查询数据
+     * @param id 主键
+     * @return 结果
+     */
+    @DS("mt5")
+    ManDynamic detailMt5(Long id);
 
 }

@@ -27,15 +27,26 @@ public class TestDynamic {
     @Test
     public void testSave() {
         ManDynamic manDynamic = ManDynamic.builder()
-                .id(3L)
+                .id(1L)
                 .name("Mengdl")
-                .tableName("test.01")
+                .tableName("test")
                 .createTime(LocalDateTime.now())
                 .updateTime(LocalDateTime.now())
                 .delFlag(0)
                 .build();
         Boolean result = dynamicService.save(manDynamic);
         System.out.println("执行结果" + result);
+    }
+
+
+    @Test
+    public void detail() {
+        ManDynamic detail = dynamicService.detail(1L);
+        ManDynamic detail1 = dynamicService.detailMt4(2L);
+        ManDynamic detail2 = dynamicService.detailMt5(3L);
+        System.out.println(detail);
+        System.out.println(detail1);
+        System.out.println(detail2);
     }
 
 }
