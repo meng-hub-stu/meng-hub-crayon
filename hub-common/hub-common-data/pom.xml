@@ -31,10 +31,15 @@
             <groupId>com.alicp.jetcache</groupId>
             <artifactId>jetcache-starter-redis-lettuce</artifactId>
         </dependency>
-
         <dependency>
             <groupId>com.esotericsoftware.kryo</groupId>
             <artifactId>kryo5</artifactId>
+        </dependency>
+
+        <!--缓存依赖-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
 
         <!-- mybatis-plus 3.5.9 需要单独引入此依赖-->

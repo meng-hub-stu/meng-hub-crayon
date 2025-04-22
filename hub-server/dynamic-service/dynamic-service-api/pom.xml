@@ -26,6 +26,12 @@
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-spring</artifactId>
         </dependency>
+
+        <!--二级缓存-->
+        <dependency>
+            <groupId>com.alicp.jetcache</groupId>
+            <artifactId>jetcache-anno-api</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

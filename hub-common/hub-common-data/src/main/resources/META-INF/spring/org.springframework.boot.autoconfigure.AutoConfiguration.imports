@@ -1,2 +1,5 @@
 com.crayon.common.data.transaction.NoticeTransaction
 com.crayon.common.data.mybatis.MybatisPlusConfiguration
+com.crayon.common.data.cache.RedisMessageConfiguration
+com.crayon.common.data.cache.TenantCacheKeyGenerator
+com.crayon.common.data.cache.RedisTemplateConfigure

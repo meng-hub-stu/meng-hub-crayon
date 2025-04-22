@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * TODO
  *
@@ -53,6 +55,13 @@ public class TeacherController {
     @Operation(summary = "删除", description = "删除老师数据")
     public R<Boolean> del(@RequestParam Long id) {
         return R.ok(teacherService.removeById(id));
+    }
+
+    @GetMapping(value = "/scroll")
+    @Operation(summary = "瀑布流加载", description = "根据已加载数量加载更多数据")
+    public R<List<Teacher>> scroll(@RequestParam(value = "offset") Integer offset,
+                                   @RequestParam(value = "limit") Integer limit) {
+        return R.ok(teacherService.scroll(offset, limit));
     }
 
 }

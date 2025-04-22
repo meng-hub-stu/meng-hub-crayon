@@ -4,7 +4,6 @@ import com.alibaba.nacos.shaded.com.google.common.collect.Maps;
 import lombok.Getter;
 
 import java.util.Map;
-import java.util.concurrent.ConcurrentMap;
 
 import static com.crayon.dynamic.constant.DynamicConstant.DYNAMIC_TABLE_NAME_PREFIX;
 import static com.crayon.dynamic.constant.DynamicConstant.SKIP_DYNAMIC_TABLE_NAME;

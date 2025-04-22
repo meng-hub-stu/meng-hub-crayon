@@ -2,8 +2,6 @@ package com.crayon.dynamic.database;
 
 import cn.hutool.db.Db;
 import cn.hutool.db.ds.simple.SimpleDataSource;
-import com.baomidou.lock.annotation.Lock4j;
-import com.crayon.dynamic.constant.DynamicConstant;
 import com.crayon.dynamic.mapper.DynamicMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,8 +9,6 @@ import org.springframework.context.annotation.Configuration;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;
-
-import static com.crayon.dynamic.database.DynamicTableNameUtils.getDmlTable;
 
 /**
  * @author Mengdl
@@ -84,9 +80,10 @@ public class ManualDataSource {
     /**
      * 检查表是否存在 如果不存在则创建表
      * todo 这里需要分布式锁，要不然就会创建重复的表
+     *
      * @param tableName 表名
      */
-    @Lock4j(name = "createTable", keys = "#tableName", expire = 15000, acquireTimeout = 1000)
+//    @Lock4j(name = "createTable", keys = "#tableName", expire = 15000, acquireTimeout = 1000)
     public void checkOrCreateTable(String tableName) {
         Boolean isExists = this.checkTableIsExists(tableName);
         if (!isExists) {
