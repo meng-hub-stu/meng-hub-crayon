@@ -42,8 +42,11 @@ public class DynamicController {
 
     @PostMapping(value = "/detail")
     @Operation(summary = "查询数据", description = "查询数据")
-    public R<ManDynamic> detail(@RequestParam("id") Long id) {
-        return R.ok(dynamicService.detail(id));
+    public R<List<ManDynamic>> detail(@RequestParam("id") Long id) {
+        ManDynamic detail = dynamicService.detail(id);
+        ManDynamic manDynamic = dynamicService.detailMt4(id, "mt4");
+        ManDynamic manDynamic1 = dynamicService.detailMt5(id, "mt5");
+        return R.ok(List.of(detail, manDynamic, manDynamic1));
     }
 
 }

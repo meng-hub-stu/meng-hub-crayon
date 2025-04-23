@@ -42,8 +42,8 @@ public class TestDynamic {
     @Test
     public void detail() {
         ManDynamic detail = dynamicService.detail(1L);
-        ManDynamic detail1 = dynamicService.detailMt4(2L);
-        ManDynamic detail2 = dynamicService.detailMt5(3L);
+        ManDynamic detail1 = dynamicService.detailMt4(2L, "");
+        ManDynamic detail2 = dynamicService.detailMt5(3L, "");
         System.out.println(detail);
         System.out.println(detail1);
         System.out.println(detail2);

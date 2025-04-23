@@ -47,23 +47,30 @@ public interface DynamicService {
 
     /**
      * 查询数据
+     *
      * @param id 主键
      * @return 结果
      */
     ManDynamic detail(Long id);
+
     /**
      * 查询数据
-     * @param id 主键
+     *
+     * @param id         主键
+     * @param dataBaseId 数据库id
      * @return 结果
      */
-    @DS("mt4")
-    ManDynamic detailMt4(Long id);
+    @DS(value = "#dataBaseId")
+    ManDynamic detailMt4(Long id, String dataBaseId);
+
     /**
      * 查询数据
-     * @param id 主键
+     *
+     * @param id         主键
+     * @param dataBaseId 数据库id
      * @return 结果
      */
-    @DS("mt5")
-    ManDynamic detailMt5(Long id);
+    @DS(value = "#dataBaseId")
+    ManDynamic detailMt5(Long id, String dataBaseId);
 
 }
