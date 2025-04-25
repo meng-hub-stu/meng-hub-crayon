@@ -9,6 +9,14 @@ spring:
     dynamic:
       primary: mt4 # 默认数据源
       strict: false # 严格匹配数据源，默认 false。true 未匹配到指定数据源时抛异常，false 使用默认数据源
+      druid:
+        initial-size: 5
+        max-active: 20
+        min-idle: 5
+        max-wait: 3000
+        validation-query: SELECT 1
+        test-while-idle: true
+        filters: wall,slf4j,druidSqlLogFilter  # 先禁用stat
       datasource:
         mt4:
           url: jdbc:mysql://${MYSQL_HOST:127.0.0.1}:${MYSQL_PORT:3306}/hub_crayon?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2B8&allowMultiQueries=true&allowPublicKeyRetrieval=true&rewriteBatchedStatements=true
@@ -22,7 +30,6 @@ spring:
           password: root
           driver-class-name: com.mysql.cj.jdbc.Driver
           type: com.alibaba.druid.pool.DruidDataSource
-
 # 报警地址
 alarm:
   fund:
