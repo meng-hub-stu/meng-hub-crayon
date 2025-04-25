@@ -7,6 +7,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.expression.ExpressionParser;
+import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,11 +44,18 @@ public class DynamicController {
 
     @PostMapping(value = "/detail")
     @Operation(summary = "查询数据", description = "查询数据")
-    public R<List<ManDynamic>> detail(@RequestParam("id") Long id) {
-        ManDynamic detail = dynamicService.detail(id);
-        ManDynamic manDynamic = dynamicService.detailMt4(id, "mt4");
-        ManDynamic manDynamic1 = dynamicService.detailMt5(id, "mt5");
-        return R.ok(List.of(detail, manDynamic, manDynamic1));
+    public R<List<ManDynamic>> detail() {
+        ManDynamic detail = dynamicService.detail(1L, "Mengdl");
+        ManDynamic manDynamic = dynamicService.detailMt4(1L, "mt5", "Xujing");
+//        ManDynamic manDynamic1 = dynamicService.detailMt5(id, "mt5", "");
+        return R.ok(List.of(detail, manDynamic));
+    }
+
+    public static void main(String[] args) {
+        ExpressionParser parser = new SpelExpressionParser();
+        String expression = "T(com.crayon.dynamic.config.DataSourceConfig).getDataSourceName()";
+        Object value = parser.parseExpression(expression).getValue();
+        System.out.println("DataSource Name: " + value);
     }
 
 }

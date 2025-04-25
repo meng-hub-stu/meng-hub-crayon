@@ -49,28 +49,31 @@ public interface DynamicService {
      * 查询数据
      *
      * @param id 主键
+     * @ param name      姓名
      * @return 结果
      */
-    ManDynamic detail(Long id);
+    ManDynamic detail(Long id, String name);
 
     /**
      * 查询数据
      *
      * @param id         主键
      * @param dataBaseId 数据库id
+     * @param name       姓名
      * @return 结果
      */
     @DS(value = "#dataBaseId")
-    ManDynamic detailMt4(Long id, String dataBaseId);
+    ManDynamic detailMt4(Long id, String dataBaseId, String name);
 
     /**
      * 查询数据
      *
      * @param id         主键
      * @param dataBaseId 数据库id
+     * @param name       姓名
      * @return 结果
      */
     @DS(value = "#dataBaseId")
-    ManDynamic detailMt5(Long id, String dataBaseId);
+    ManDynamic detailMt5(Long id, String dataBaseId, String name);
 
 }

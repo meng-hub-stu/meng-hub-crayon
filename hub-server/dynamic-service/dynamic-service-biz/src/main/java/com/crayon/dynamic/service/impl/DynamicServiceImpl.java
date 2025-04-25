@@ -32,16 +32,16 @@ public class DynamicServiceImpl implements DynamicService {
     private final ManualDataSource manualDataSource;
 
     @Override
-    public ManDynamic detail(Long id) {
-        return dynamicMapper.selectById(id);
+    public ManDynamic detail(Long id, String name) {
+        return dynamicMapper.selectById(id, name);
     }
     @Override
-    public ManDynamic detailMt4(Long id, String dataBaseId) {
-        return dynamicMapper.selectById(id);
+    public ManDynamic detailMt4(Long id, String dataBaseId, String name) {
+        return dynamicMapper.selectById(id, name);
     }
     @Override
-    public ManDynamic detailMt5(Long id, String dataBaseId) {
-        return dynamicMapper.selectById(id);
+    public ManDynamic detailMt5(Long id, String dataBaseId, String name) {
+        return dynamicMapper.selectById(id, name);
     }
 
     @Override

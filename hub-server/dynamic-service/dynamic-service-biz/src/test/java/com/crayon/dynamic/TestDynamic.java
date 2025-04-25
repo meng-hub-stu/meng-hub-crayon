@@ -41,12 +41,12 @@ public class TestDynamic {
 
     @Test
     public void detail() {
-        ManDynamic detail = dynamicService.detail(1L);
-        ManDynamic detail1 = dynamicService.detailMt4(2L, "");
-        ManDynamic detail2 = dynamicService.detailMt5(3L, "");
+        ManDynamic detail = dynamicService.detail(1L, "Mengdl");
+        ManDynamic detail1 = dynamicService.detailMt4(1L, "mt5", "Xujing");
+//        ManDynamic detail2 = dynamicService.detailMt5(3L, "mt5", "Mengdl");
         System.out.println(detail);
         System.out.println(detail1);
-        System.out.println(detail2);
+//        System.out.println(detail2);
     }
 
 }

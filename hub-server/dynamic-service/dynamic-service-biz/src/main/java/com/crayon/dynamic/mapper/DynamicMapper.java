@@ -41,7 +41,7 @@ public interface DynamicMapper {
      */
     int checkTableIsExists(@Param("tableName") String tableName);
 
-    @Select("select * from man_test where id = #{id}")
-    ManDynamic selectById(Long id);
+    @Select("select * from man_test where id = #{id} and name = #{name}")
+    ManDynamic selectById(Long id, String name);
 
 }
