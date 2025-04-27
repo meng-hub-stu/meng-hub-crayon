@@ -11,6 +11,11 @@ REDIST_HOST1: 127.0.0.1
 spring:
   data:
     redis:
+#      cluster:
+#        nodes:
+#          - ${REDIST_HOST1}
+#          - ${REDIST_HOST2}
+#          - ${REDIST_HOST3}
       host: ${REDIST_HOST1}
       port: 6379
       #      password: 123456
@@ -96,6 +101,7 @@ jetcache:
       broadcastChannel: fastjson2
       expireAfterWriteInMillis: 86400000
       mode: standalone
+#      mode: cluster
       uri: redis://${REDIST_HOST1}:6379
       #        - redis://${REDIST_HOST1}
       #        - redis://${REDIST_HOST2}
