@@ -41,13 +41,12 @@ public interface DynamicMapper {
      */
     int checkTableIsExists(@Param("tableName") String tableName);
 
-    @Select("select * from man_test where id = #{id} and name = #{name}")
-    ManDynamic selectById(@Param("id") Long id, @Param("name") String name);
-
-    @Select("select * from man_test where id = #{id}")
-    ManDynamic selectById(@Param("id") Long id);
-
+    /**
+     * 动态查询
+     * @param manDynamic 实体
+     * @return  结果
+     */
     @Select("select * from man_test where id = #{manDynamic.id}")
-    ManDynamic selectById(@Param("manDynamic") ManDynamic manDynamic);
+    ManDynamic selectByCondition(@Param("manDynamic") ManDynamic manDynamic);
 
 }

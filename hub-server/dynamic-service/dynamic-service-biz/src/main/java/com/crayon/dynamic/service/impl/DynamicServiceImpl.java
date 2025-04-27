@@ -33,15 +33,15 @@ public class DynamicServiceImpl implements DynamicService {
 
     @Override
     public ManDynamic detail(Long id, String name) {
-        return dynamicMapper.selectById(id, name);
+        return dynamicMapper.selectByCondition(ManDynamic.builder().id(id).name(name).build());
     }
     @Override
     public ManDynamic detailMt4(Long id, String dataBaseId, String name) {
-        return dynamicMapper.selectById(id);
+        return dynamicMapper.selectByCondition(ManDynamic.builder().id(id).name(name).build());
     }
     @Override
     public ManDynamic detailMt5(Long id, String dataBaseId, String name) {
-        return dynamicMapper.selectById(ManDynamic.builder().id(id).name(name).build());
+        return dynamicMapper.selectByCondition(ManDynamic.builder().id(id).name(name).build());
     }
 
     @Override
