@@ -1,5 +1,6 @@
 package com.crayon.teacher;
 
+import com.alicp.jetcache.anno.config.EnableMethodCache;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
@@ -15,6 +16,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @EnableFeignClients("com.crayon")
 @EnableDiscoveryClient
 @SpringBootApplication
+@EnableMethodCache(basePackages = "com.crayon.teacher")
 //@EnableDeptInterceptor("teacher")
 public class TeacherApplication {
     public static void main(String[] args) {

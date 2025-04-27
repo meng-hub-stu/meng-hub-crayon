@@ -1,5 +1,7 @@
 package com.crayon.teacher.service.impl;
 
+import com.alicp.jetcache.anno.CacheType;
+import com.alicp.jetcache.anno.Cached;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.crayon.teacher.entity.Teacher;
@@ -21,6 +23,12 @@ public class TeacherServiceImpl extends ServiceImpl<TeacherMapper, Teacher> impl
     @Override
     public List<Teacher> scroll(Integer offset, Integer limit) {
         return baseMapper.selectPage(new Page<>(offset / limit + 1, limit), null).getRecords();
+    }
+
+    @Override
+    @Cached(name = "teacher:detail", key = "#id", cacheType = CacheType.BOTH, localExpire = 60)
+    public Teacher detail(Long id) {
+        return baseMapper.selectById(id);
     }
 
 }

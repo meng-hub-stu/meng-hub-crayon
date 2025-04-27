@@ -34,7 +34,7 @@ public class TeacherController {
     @GetMapping(value = "/{id}")
     @Operation(summary = "详情", description = "id获取详情")
     public R<Teacher> detail(@PathVariable(value = "id") Long id) {
-        return R.ok(teacherService.getById(id));
+        return R.ok(teacherService.detail(id));
     }
 
     @PostMapping

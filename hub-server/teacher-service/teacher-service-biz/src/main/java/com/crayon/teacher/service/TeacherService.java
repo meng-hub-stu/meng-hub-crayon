@@ -19,4 +19,11 @@ public interface TeacherService extends IService<Teacher> {
      */
     List<Teacher> scroll(Integer offset, Integer limit);
 
+    /**
+     * 详情
+     * @param id 主键
+     * @return 详情
+     */
+    Teacher detail(Long id);
+
 }

@@ -16,7 +16,7 @@ spring:
         max-wait: 3000
         validation-query: SELECT 1
         test-while-idle: true
-        filters: wall,slf4j,druidSqlLogFilter  # 先禁用stat
+        filters: wall,slf4j  # 先禁用stat
       datasource:
         mt4:
           url: jdbc:mysql://${MYSQL_HOST:127.0.0.1}:${MYSQL_PORT:3306}/hub_crayon?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2B8&allowMultiQueries=true&allowPublicKeyRetrieval=true&rewriteBatchedStatements=true
