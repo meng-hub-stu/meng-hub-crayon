@@ -78,8 +78,14 @@ public class MyBatisSqlLogInterceptor implements Interceptor {
 
         List<Object> parameters = new ArrayList<>();
         if (parameterObject != null) {
-            // 获取参数
-            parameters.add(getJdbcParameter(parameterObject));
+            if (parameterObject instanceof Map) {
+                Map<String, String> paramMap = (Map) parameterObject;
+                for (Map.Entry<String, String> entry : paramMap.entrySet()) {
+                    parameters.add(getJdbcParameter(entry.getValue()));
+                }
+            }else {
+                parameters.add(parameterObject);
+            }
         }
 
         String formattedSql = SQLUtils.format(sql, DbType.of(mappedStatement.getConfiguration().getDatabaseId()), parameters, FORMAT_OPTION);

@@ -45,10 +45,10 @@ public class DynamicController {
     @PostMapping(value = "/detail")
     @Operation(summary = "查询数据", description = "查询数据")
     public R<List<ManDynamic>> detail() {
-        ManDynamic detail = dynamicService.detail(1L, "Mengdl");
-        ManDynamic manDynamic = dynamicService.detailMt4(1L, "mt5", "Xujing");
-//        ManDynamic manDynamic1 = dynamicService.detailMt5(id, "mt5", "");
-        return R.ok(List.of(detail, manDynamic));
+//        ManDynamic detail = dynamicService.detail(1L, "Mengdl");
+//        ManDynamic manDynamic = dynamicService.detailMt4(1L, "mt5", "Xujing");
+        ManDynamic manDynamic1 = dynamicService.detailMt5(1L, "mt5", "Xujing");
+        return R.ok(List.of(manDynamic1));
     }
 
     public static void main(String[] args) {
