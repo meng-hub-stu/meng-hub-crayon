@@ -2,6 +2,7 @@ package com.crayon.teacher.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
+import com.crayon.teacher.valid.MobileValid;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
@@ -40,6 +41,7 @@ public class Teacher extends Model<Teacher> {
     private String sex;
 
     @Schema(description = "手机号")
+    @MobileValid
     private String mobile;
 
     @Schema(description = "邮箱")

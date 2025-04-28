@@ -1,6 +1,7 @@
 package com.crayon.teacher.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.crayon.base.test.yu.ed.controller.AbstractTeacherController;
 import com.crayon.common.core.util.R;
 import com.crayon.teacher.entity.Teacher;
 import com.crayon.teacher.service.TeacherService;
@@ -21,7 +22,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "/teacher")
-public class TeacherController {
+public class TeacherController extends AbstractTeacherController {
 
     private final TeacherService teacherService;
 
@@ -34,6 +35,8 @@ public class TeacherController {
     @GetMapping(value = "/{id}")
     @Operation(summary = "详情", description = "id获取详情")
     public R<Teacher> detail(@PathVariable(value = "id") Long id) {
+        String test = this.test(id);
+        System.out.println(test);
         return R.ok(teacherService.detail(id));
     }
 

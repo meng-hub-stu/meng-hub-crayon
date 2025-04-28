@@ -16,6 +16,7 @@
         <module>dynamic-service</module>
         <module>student-service</module>
         <module>teacher-service</module>
+        <module>base-service</module>
     </modules>
 
 </project>
