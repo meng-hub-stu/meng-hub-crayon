@@ -1,6 +1,7 @@
 package com.crayon.teacher.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.crayon.base.test.yu.ed.service.BaseService;
 import com.crayon.teacher.entity.Teacher;
 
 import java.util.List;
@@ -9,7 +10,7 @@ import java.util.List;
  * @author Mengdl
  * @date 2024/11/28
  */
-public interface TeacherService extends IService<Teacher> {
+public interface TeacherService extends IService<Teacher>, BaseService {
 
     /**
      * 瀑布流加载

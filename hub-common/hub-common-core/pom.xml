@@ -33,6 +33,10 @@
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-core</artifactId>
         </dependency>
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-extra</artifactId>
+        </dependency>
         <!--mvc 相关配置-->
         <dependency>
             <groupId>org.springframework</groupId>

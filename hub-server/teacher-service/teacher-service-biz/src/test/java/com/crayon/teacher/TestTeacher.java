@@ -1,6 +1,7 @@
 package com.crayon.teacher;
 
 import com.alibaba.druid.pool.DruidDataSource;
+import com.crayon.base.test.yu.ed.service.AbstractBase;
 import com.crayon.teacher.entity.Teacher;
 import com.crayon.teacher.service.TeacherService;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +28,9 @@ public class TestTeacher {
     private TeacherService teacherService;
 
     @Autowired
+    private AbstractBase<TeacherService> abstractBase;
+
+    @Autowired
     private DataSource dataSource;
 
     @Test
@@ -48,6 +52,12 @@ public class TestTeacher {
             );
         }
         System.out.println( "未使用 Druid 连接池！");
+    }
+
+    @Test
+    public void testStrategy() {
+        String test = abstractBase.test(1L);
+        System.out.println(test);
     }
 
 }

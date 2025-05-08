@@ -1,7 +1,7 @@
 package com.crayon.teacher.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.crayon.base.test.yu.ed.controller.AbstractTeacherController;
+import com.crayon.base.test.yu.ed.service.AbstractBase;
 import com.crayon.common.core.util.R;
 import com.crayon.teacher.entity.Teacher;
 import com.crayon.teacher.service.TeacherService;
@@ -22,9 +22,10 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "/teacher")
-public class TeacherController extends AbstractTeacherController {
+public class TeacherController {
 
     private final TeacherService teacherService;
+    private final AbstractBase<TeacherService> abstractBase;
 
     @GetMapping(value = "/page")
     @Operation(summary = "分页", description = "id获取详情")
@@ -35,8 +36,6 @@ public class TeacherController extends AbstractTeacherController {
     @GetMapping(value = "/{id}")
     @Operation(summary = "详情", description = "id获取详情")
     public R<Teacher> detail(@PathVariable(value = "id") Long id) {
-        String test = this.test(id);
-        System.out.println(test);
         return R.ok(teacherService.detail(id));
     }
 
@@ -65,6 +64,12 @@ public class TeacherController extends AbstractTeacherController {
     public R<List<Teacher>> scroll(@RequestParam(value = "offset") Integer offset,
                                    @RequestParam(value = "limit") Integer limit) {
         return R.ok(teacherService.scroll(offset, limit));
+    }
+
+    @GetMapping(value = "/strategy")
+    @Operation(summary = "测试策略", description = "测试策略")
+    public R<String> testStrategy(@RequestParam Long id) {
+        return R.ok(abstractBase.test(id));
     }
 
 }

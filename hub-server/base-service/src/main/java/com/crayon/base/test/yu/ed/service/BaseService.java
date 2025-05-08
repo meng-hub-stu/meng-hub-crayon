@@ -6,11 +6,4 @@ package com.crayon.base.test.yu.ed.service;
  */
 public interface BaseService {
 
-    /**
-     * 测试
-     * @param id id
-     * @return String
-     */
-    String selectStudent(Long id);
-
 }

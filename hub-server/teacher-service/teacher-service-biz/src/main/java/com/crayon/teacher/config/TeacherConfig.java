@@ -1,4 +1,4 @@
-package com.crayon.teacher.cofnig;
+package com.crayon.teacher.config;
 
 import feign.RequestInterceptor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
