@@ -3,6 +3,7 @@ package com.crayon.student.runner;
 import com.crayon.netty.client.tcp.config.NettyClientAction;
 import com.crayon.netty.client.tcp.server.NettyClientConnect;
 import com.crayon.netty.client.websocket.config.WebsocketClientAction;
+import com.crayon.netty.client.websocket.config.WebsocketConsumerHandler;
 import com.crayon.netty.client.websocket.server.WebSocketConnect;
 import io.netty.handler.codec.http.DefaultHttpHeaders;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,8 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.stereotype.Component;
+
+import java.util.function.Consumer;
 
 /**
  * @author Mengdl
@@ -37,9 +40,17 @@ public class MessageRunner implements ApplicationRunner {
         WebsocketClientAction websocketClientAction = (String data) -> {
             log.info("websocket receive message:{}", data);
         };
+        WebsocketConsumerHandler websocketConsumerHandler = (Consumer<Object> data) -> {
+            log.info("websocket receive message:{}", data);
+            data.accept("123");
+        };
+        websocketConsumerHandler.handler(data -> {
+            data.toString();
+        });
         DefaultHttpHeaders defaultHttpHeaders = new DefaultHttpHeaders();
         defaultHttpHeaders.add("Authorization", "Bearer your_valid_token_here");
         webSocketConnect.connectServer(websocketClientAction, defaultHttpHeaders);
     }
+
 
 }

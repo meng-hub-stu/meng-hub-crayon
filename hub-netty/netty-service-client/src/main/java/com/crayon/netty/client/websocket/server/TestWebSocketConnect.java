@@ -1,7 +1,9 @@
 package com.crayon.netty.client.websocket.server;
 
 import com.crayon.netty.client.websocket.config.WebsocketClientAction;
+import io.netty.handler.codec.http.websocketx.WebSocketClientHandshaker;
 
+import java.net.URI;
 import java.util.List;
 
 /**
@@ -27,5 +29,11 @@ public class TestWebSocketConnect {
         }));
         //主线程等待
         Thread.currentThread().join();
+
+        Class<?> clazz = Class.forName("com.crayon.netty.client.websocket.handler.WebSocketClientHandler");
+        // 获取构造函数
+        Object handler = clazz.getDeclaredConstructor(URI.class, WebSocketClientHandshaker.class,
+                WebsocketClientAction.class, WebSocketServer.class).newInstance(null, null, null, null);
     }
+
 }

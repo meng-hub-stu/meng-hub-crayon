@@ -1,6 +1,7 @@
 package com.crayon.dynamic.controller;
 
 import com.crayon.common.core.util.R;
+import com.crayon.dynamic.config.DataSourceConfiguration;
 import com.crayon.dynamic.entity.model.ManDynamic;
 import com.crayon.dynamic.service.DynamicService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -10,7 +11,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -29,6 +33,7 @@ import java.util.List;
 public class DynamicController {
 
     private final DynamicService dynamicService;
+    private final DataSourceConfiguration dataSourceConfiguration;
 
     @PostMapping(value = "/save")
     @Operation(summary = "新增数据", description = "新增数据")
@@ -49,6 +54,14 @@ public class DynamicController {
 //        ManDynamic manDynamic = dynamicService.detailMt4(1L, "mt5", "Xujing");
         ManDynamic manDynamic1 = dynamicService.detailMt5(1L, "mt5", "Xujing");
         return R.ok(List.of(manDynamic1));
+    }
+
+
+    @PostMapping(value = "/addDataSource")
+    @Operation(summary = "添加数据源", description = "添加数据源")
+    public R<?> addDataSource() {
+        dataSourceConfiguration.addDataSource();
+        return R.ok();
     }
 
     public static void main(String[] args) {
