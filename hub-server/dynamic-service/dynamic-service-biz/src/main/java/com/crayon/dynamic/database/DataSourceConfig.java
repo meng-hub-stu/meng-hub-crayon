@@ -1,10 +1,11 @@
 package com.crayon.dynamic.database;
 
 import com.alibaba.druid.pool.DruidDataSource;
-import com.alibaba.druid.pool.DruidDataSourceFactory;
 import com.alibaba.druid.wall.WallConfig;
 import com.alibaba.druid.wall.WallFilter;
 import com.baomidou.dynamic.datasource.DynamicRoutingDataSource;
+import com.baomidou.dynamic.datasource.creator.DataSourceProperty;
+import com.baomidou.dynamic.datasource.creator.DefaultDataSourceCreator;
 import com.baomidou.dynamic.datasource.ds.ItemDataSource;
 import com.baomidou.dynamic.datasource.spring.boot.autoconfigure.DynamicDataSourceAutoConfiguration;
 import com.crayon.common.data.mybatis.DruidSqlLogFilter;
@@ -37,12 +38,14 @@ public class DataSourceConfig {
     private final DynamicRoutingDataSource dynamicRoutingDataSource;
     private final DruidSqlLogFilter druidSqlLogFilter;
     private final ApplicationContext applicationContext;
+    private final DefaultDataSourceCreator defaultDataSourceCreator;
 
     @Autowired
-    public DataSourceConfig(DataSource dataSource, DruidSqlLogFilter druidSqlLogFilter, ApplicationContext applicationContext) {
+    public DataSourceConfig(DataSource dataSource, DruidSqlLogFilter druidSqlLogFilter, ApplicationContext applicationContext, DefaultDataSourceCreator defaultDataSourceCreator) {
         this.dynamicRoutingDataSource = (DynamicRoutingDataSource) dataSource;
         this.druidSqlLogFilter = druidSqlLogFilter;
         this.applicationContext = applicationContext;
+        this.defaultDataSourceCreator = defaultDataSourceCreator;
     }
 
     @PostConstruct
@@ -95,8 +98,20 @@ public class DataSourceConfig {
             properties.setProperty("testOnBorrow", "false");
             properties.setProperty("testOnReturn", "false");
 
+            //使用dynamic
+            DataSourceProperty dataSourceProperty = new DataSourceProperty();
+            dataSourceProperty.setUrl(config.getUrl());
+            dataSourceProperty.setUsername(config.getUsername());
+            dataSourceProperty.setPassword(config.getPassword());
+            dataSourceProperty.setDriverClassName(config.getDriverClassName());
+            dataSourceProperty.setPoolName(beanName);
+            dataSourceProperty.setType(DruidDataSource.class);
+
             try {
-                DruidDataSource dataSource = (DruidDataSource) DruidDataSourceFactory.createDataSource(properties);
+                ItemDataSource itemDataSource = (ItemDataSource) defaultDataSourceCreator.createDataSource(dataSourceProperty);
+                itemDataSource.setName(beanName);
+                DruidDataSource dataSource = (DruidDataSource) itemDataSource.getDataSource();
+//                DruidDataSource dataSource = (DruidDataSource) DruidDataSourceFactory.createDataSource(properties);
                 dataSource.getProxyFilters().add(druidSqlLogFilter);
                 dataSource.init();
                 //注册为bean
