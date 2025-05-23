@@ -1,7 +1,7 @@
 package com.crayon.dynamic.controller;
 
 import com.crayon.common.core.util.R;
-import com.crayon.dynamic.config.DataSourceConfiguration;
+import com.crayon.dynamic.database.DataSourceConfig;
 import com.crayon.dynamic.entity.model.ManDynamic;
 import com.crayon.dynamic.service.DynamicService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -33,7 +33,7 @@ import java.util.List;
 public class DynamicController {
 
     private final DynamicService dynamicService;
-    private final DataSourceConfiguration dataSourceConfiguration;
+    private final DataSourceConfig dataSourceConfig;
 
     @PostMapping(value = "/save")
     @Operation(summary = "新增数据", description = "新增数据")
@@ -60,7 +60,7 @@ public class DynamicController {
     @PostMapping(value = "/addDataSource")
     @Operation(summary = "添加数据源", description = "添加数据源")
     public R<?> addDataSource() {
-        dataSourceConfiguration.addDataSource();
+        dataSourceConfig.addDataSource();
         return R.ok();
     }
 

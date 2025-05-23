@@ -1,4 +1,4 @@
-package com.crayon.dynamic.config;
+package com.crayon.dynamic.database;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.pool.DruidDataSourceFactory;
@@ -10,8 +10,8 @@ import com.baomidou.dynamic.datasource.spring.boot.autoconfigure.DynamicDataSour
 import com.crayon.common.data.mybatis.DruidSqlLogFilter;
 import jakarta.annotation.PostConstruct;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.beans.factory.support.GenericBeanDefinition;
@@ -32,29 +32,22 @@ import java.util.function.Supplier;
 @Slf4j
 @Configuration
 @AutoConfigureAfter({DynamicDataSourceAutoConfiguration.class})
-@RequiredArgsConstructor
-public class DataSourceConfiguration {
+public class DataSourceConfig {
 
-    private final DataSource dataSource;
+    private final DynamicRoutingDataSource dynamicRoutingDataSource;
     private final DruidSqlLogFilter druidSqlLogFilter;
     private final ApplicationContext applicationContext;
 
-//    @Bean
-    public WallFilter wallFilter() {
-        WallFilter wallFilter = new WallFilter();
-        WallConfig config = new WallConfig();
-        config.setMultiStatementAllow(true);
-        wallFilter.setConfig(config);
-        return wallFilter;
+    @Autowired
+    public DataSourceConfig(DataSource dataSource, DruidSqlLogFilter druidSqlLogFilter, ApplicationContext applicationContext) {
+        this.dynamicRoutingDataSource = (DynamicRoutingDataSource) dataSource;
+        this.druidSqlLogFilter = druidSqlLogFilter;
+        this.applicationContext = applicationContext;
     }
 
     @PostConstruct
     public void initDynamic() {
         log.info("动态数据源初始化中...");
-        DynamicRoutingDataSource dynamicRoutingDataSource = getDynamicRouting();
-        if (dynamicRoutingDataSource == null) {
-            return;
-        }
         Map<String, DataSource> dataSources = dynamicRoutingDataSource.getDataSources();
         for (Map.Entry<String, DataSource> entry : dataSources.entrySet()) {
             DataSource realDataSource = entry.getValue();
@@ -82,13 +75,9 @@ public class DataSourceConfiguration {
     }
 
     public void addDataSource() {
-        DynamicRoutingDataSource dynamicRoutingDataSource = getDynamicRouting();
-        if (dynamicRoutingDataSource == null) {
-            return;
-        }
         ConfigurableApplicationContext configurableContext = (ConfigurableApplicationContext) applicationContext;
         DefaultListableBeanFactory beanFactory = (DefaultListableBeanFactory) configurableContext.getBeanFactory();
-        DataSourceConfig config = new DataSourceConfig();
+        InitDataSourceConfig config = new InitDataSourceConfig();
         String beanName = config.getName();
         if (!beanFactory.containsBean(beanName)) {
             Properties properties = new Properties();
@@ -127,22 +116,10 @@ public class DataSourceConfiguration {
     }
 
     /**
-     * 获取动态数据源
-     *
-     * @return DynamicRoutingDataSource
-     */
-    public DynamicRoutingDataSource getDynamicRouting() {
-        if (dataSource instanceof DynamicRoutingDataSource dynamicRoutingDataSource) {
-            return dynamicRoutingDataSource;
-        }
-        return null;
-    }
-
-    /**
      * 测试数据
      */
     @Data
-    public static class DataSourceConfig {
+    public static class InitDataSourceConfig {
         private String name = "mt5-crayon";
         private String url = "jdbc:mysql://52.206.241.22:3308/mt5_vfx_test3";
         private String username = "app-mt5-ro";
