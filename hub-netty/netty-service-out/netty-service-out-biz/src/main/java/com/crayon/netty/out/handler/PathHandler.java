@@ -32,7 +32,7 @@ public class PathHandler extends ChannelInboundHandlerAdapter {
                 sendForbiddenResponse(ctx);
             }
         } else {
-            sendForbiddenResponse(ctx);
+            ctx.fireChannelRead(msg);
         }
     }
 

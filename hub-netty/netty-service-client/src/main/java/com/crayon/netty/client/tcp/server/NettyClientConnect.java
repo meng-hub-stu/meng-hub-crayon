@@ -97,6 +97,7 @@ public class NettyClientConnect {
      */
     @Scheduled(fixedDelay = 10000, initialDelay = 1000)
     public void healthCheck() {
+        log.info("定时检查服务连接");
         connectToServerName(NettyClientManager.getNettyClientAction());
     }
 
