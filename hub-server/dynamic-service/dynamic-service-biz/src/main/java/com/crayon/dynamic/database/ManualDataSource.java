@@ -34,6 +34,8 @@ public class ManualDataSource {
             		PRIMARY KEY (id)
             	)""";
 
+    private static final String CREATE_SQL = "CREATE DATABASE IF NOT EXISTS kline_%s";
+
     /**
      * 创建表
      *
@@ -57,6 +59,24 @@ public class ManualDataSource {
         }
     }
 
+    public void createDataBase(String dataBaseName) {
+        try {
+            DataSource dataSource = new SimpleDataSource(
+                    properties.getMysqlUrl(),
+                    properties.getMysqlUser(),
+                    properties.getMysqlPwd()
+            );
+            Db db = Db.use(dataSource);
+            String format = String.format(SQL, dataBaseName.toLowerCase());
+            int execute = db.execute(format);
+            log.info("create database success {}: {}", dataBaseName, execute);
+            DynamicTableNameUtils.getIS_EXISTS_DATA().put(dataBaseName, true);
+        } catch (SQLException e) {
+            log.info("create database error {}: {}", dataBaseName, e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
+
     /**
      * 检查表是否存在
      *
@@ -68,7 +88,7 @@ public class ManualDataSource {
         if (isExist != null && isExist) {
             return true;
         }
-        boolean isExistDb = dynamicMapper.checkTableIsExists(tableName) > 0;
+        boolean isExistDb = dynamicMapper.checkTableIsExists("hub_crayon", tableName) > 0;
         if (isExistDb) {
             DynamicTableNameUtils.getIS_EXISTS_TABLE().put(tableName, true);
         } else {

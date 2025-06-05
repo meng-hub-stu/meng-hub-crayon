@@ -30,10 +30,18 @@ public class TestWebSocketConnect {
         //主线程等待
         Thread.currentThread().join();
 
+        //使用反射
         Class<?> clazz = Class.forName("com.crayon.netty.client.websocket.handler.WebSocketClientHandler");
         // 获取构造函数
         Object handler = clazz.getDeclaredConstructor(URI.class, WebSocketClientHandshaker.class,
                 WebsocketClientAction.class, WebSocketServer.class).newInstance(null, null, null, null);
+        Object o = clazz.getDeclaredConstructor().newInstance();
+
+
+//        ParameterizedType parameterizedType = (ParameterizedType) this.getClass().getGenericSuperclass();
+//        Class<Context> contextClass = (Class<Context>) parameterizedType.getActualTypeArguments()[2];
+//        return newInstance(contextClass);
+
     }
 
 }

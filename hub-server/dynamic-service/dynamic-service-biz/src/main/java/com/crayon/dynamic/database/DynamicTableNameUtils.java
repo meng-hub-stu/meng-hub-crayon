@@ -18,8 +18,17 @@ public class DynamicTableNameUtils {
 
     private static final ThreadLocal<String> DYNAMIC_TABLE_NAME = new ThreadLocal<>();
 
+    /**
+     * 表名是否存在
+     */
     @Getter
     private static final Map<String, Boolean> IS_EXISTS_TABLE = Maps.newConcurrentMap();
+
+    /**
+     * 库名是否存在
+     */
+    @Getter
+    private static final Map<String, Boolean> IS_EXISTS_DATA = Maps.newConcurrentMap();
 
     /**
      * 设置表明

@@ -3,10 +3,26 @@
 
 <mapper namespace="com.crayon.dynamic.mapper.DynamicMapper">
 
+    <insert id='insertBatch2Dynamic'>
+        <foreach collection="dataList" item="item" separator=";" index="index">
+            insert into ${item.tableName} (id, name, create_time, update_time, del_flag) values
+            <foreach collection="item.manDynamics" item="manDynamic" separator=",">
+                (#{manDynamic.id}, #{manDynamic.name}, #{manDynamic.createTime}, #{manDynamic.updateTime},
+                #{manDynamic.delFlag})
+            </foreach>
+            ON DUPLICATE KEY UPDATE
+            id = VALUES(id),
+            name = VALUES(name),
+            create_time = VALUES(create_time),
+            update_time = VALUES(update_time),
+            del_flag = VALUES(del_flag)
+        </foreach>
+    </insert>
+
     <insert id='insertBatchDynamic'>
         insert into ${tableName}
         (id, name, create_time, update_time, del_flag) values
-        <foreach collection='list' item='item' separator=','>
+        <foreach collection='dataList' item='item' separator=','>
             (#{item.id}, #{item.name}, #{item.createTime}, #{item.updateTime}, #{item.delFlag})
         </foreach>
     </insert>
@@ -20,8 +36,14 @@
     <select id="checkTableIsExists" resultType="integer">
         SELECT COUNT(1) as reuslt
         FROM INFORMATION_SCHEMA.TABLES
-        WHERE TABLE_SCHEMA = 'hub_crayon'
+        WHERE TABLE_SCHEMA = #{dataBaseName}
           AND TABLE_NAME = #{tableName};
+    </select>
+
+    <select id="checkDataBaseIsExists" resultType="integer">
+        SELECT COUNT(1) as reuslt
+        FROM INFORMATION_SCHEMA.SCHEMATA
+        WHERE SCHEMA_NAME = #{dataBaseName};
     </select>
 
     <select id="selectByCondition1" resultType="com.crayon.dynamic.entity.model.ManDynamic">
