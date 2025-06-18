@@ -10,6 +10,18 @@ import com.crayon.student.entity.resp.StudentResp;
  */
 public interface StudentService extends IService<Student> {
 
+    /**
+     * 查询数据
+     * @param id id
+     * @return StudentResp
+     */
     StudentResp detail(Long id);
+
+    /**
+     * 查询数据
+     * @param id id
+     * @return StudentResp
+     */
+    StudentResp detail1(Long id);
 
 }

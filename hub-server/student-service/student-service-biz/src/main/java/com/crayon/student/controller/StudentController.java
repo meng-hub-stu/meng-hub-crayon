@@ -86,7 +86,7 @@ public class StudentController {
 
 
     public static void main(String[] args) {
-        String credentials = "account_au" + ":" + "dfhdftghcvsdfyhgerfty";
+        String credentials = "bybit_demo" + ":" + "ertuetyjdfgyjfghjwerqwevf";
         String encodedCredentials = Base64.encode(credentials.getBytes(StandardCharsets.UTF_8));
         System.out.println(encodedCredentials);
         byte[] decode = Base64.decode(encodedCredentials.getBytes(StandardCharsets.UTF_8));

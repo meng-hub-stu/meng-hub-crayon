@@ -3,6 +3,8 @@ package com.crayon.teacher.feign;
 import com.crayon.common.core.util.R;
 import com.crayon.teacher.entity.Teacher;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RequestParam;
+
 /**
  * TODO
  *
@@ -19,7 +21,7 @@ public class TeacherFeignClientFallBack implements TeacherFeignClient {
      * @return
      */
     @Override
-    public R<Teacher> getInfo(Long id) {
+    public R<Teacher> getInfo(@RequestParam(value = "id") Long id) {
         return R.failed();
     }
 

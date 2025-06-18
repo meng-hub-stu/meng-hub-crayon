@@ -4,6 +4,8 @@ import com.crayon.netty.client.websocket.config.WebsocketClientAction;
 import com.crayon.netty.client.websocket.config.WebsocketClientManager;
 import com.crayon.netty.client.websocket.server.WebSocketServer;
 import io.netty.buffer.Unpooled;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.FullHttpResponse;
@@ -12,6 +14,7 @@ import io.netty.util.CharsetUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.URI;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Mengdl
@@ -38,7 +41,24 @@ public class WebSocketClientHandler extends SimpleChannelInboundHandler<Object> 
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         // 发起握手请求
         log.info("channelActive channelId: {}", ctx.channel().id());
-        handshake.handshake(ctx.channel());
+        ChannelFuture future = handshake.handshake(ctx.channel());
+        // TODO 下面内容没有经过测试
+        boolean success = future.await(5, TimeUnit.SECONDS);
+        if (success && future.isSuccess()) {
+            // 握手成功
+            System.out.println("Handshake succeeded.");
+        } else {
+            // 握手失败或超时
+            System.out.println("Handshake failed or timed out.");
+            future.cancel(true);
+        }
+        future.addListener((ChannelFutureListener) f -> {
+            if (f.isSuccess()) {
+                System.out.println("Asynchronous handshake succeeded.");
+            } else {
+                System.out.println("Asynchronous handshake failed.");
+            }
+        });
     }
 
     @Override

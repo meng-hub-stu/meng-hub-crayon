@@ -25,7 +25,8 @@ public class TeacherFeignClientController implements TeacherFeignClient {
     @Override
     @GetMapping("/detail")
     public R<Teacher> getInfo(@RequestParam(value = "id") Long id) {
-        return R.ok(teacherService.getById(id));
+        throw new RuntimeException("接口主动抛出异常，用于测试 fallback");
+//        return R.ok(teacherService.getById(id));
     }
 
 }

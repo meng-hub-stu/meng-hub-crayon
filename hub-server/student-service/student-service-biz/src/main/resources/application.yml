@@ -20,3 +20,9 @@ spring:
     import:
       - optional:nacos:application.yml
       - optional:nacos:${spring.application.name}.yml
+# TODO 调试而已，未证实
+feign:
+  client:
+    config:
+      enable-fallback: true
+      logger-level: full

@@ -15,6 +15,7 @@ import com.crayon.teacher.entity.Teacher;
 import com.crayon.teacher.feign.TeacherFeignClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cloud.client.circuitbreaker.CircuitBreakerFactory;
 import org.springframework.stereotype.Service;
 
 import static com.alibaba.fastjson2.JSON.copyTo;
@@ -30,6 +31,7 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> impl
 
     private final TeacherFeignClient teacherFeignClient;
     private final NoticeTransaction noticeTransaction;
+    private final CircuitBreakerFactory circuitBreakerFactory;
 
     @Override
     public StudentResp detail(Long id) {
@@ -47,8 +49,20 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> impl
         //测试枚举
         IStatus.find(1, GradeType.class).ifPresent(e -> resp.setGradeTypeName(e.getDesc()));
         GradeType one = GradeType.valueOf("ONE");
+        return resp;
+    }
 
-
+    @Override
+    public StudentResp detail1(Long id) {
+        Student student = this.getById(id);
+        StudentResp resp = copyTo(student, StudentResp.class);
+        R<Teacher> teacherR = circuitBreakerFactory.create("teacher-service-biz").run(
+                () -> teacherFeignClient.getInfo(1898539391580446723L),
+                throwable -> R.failed("调用 teacher-service 失败，已触发降级"));
+        if (teacherR.isOk() && teacherR.getData() != null) {
+            resp.setTeacherResp(copyTo(teacherR.getData(), TeacherResp.class));
+        }
+        log.info(JSON.toJSONString(resp));
         return resp;
     }
 
