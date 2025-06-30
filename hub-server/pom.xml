@@ -17,6 +17,7 @@
         <module>student-service</module>
         <module>teacher-service</module>
         <module>base-service</module>
+        <module>grpc-service</module>
     </modules>
 
 </project>
