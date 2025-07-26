@@ -21,11 +21,11 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>21</java.version>
-        <spring-cloud.version>2023.0.0</spring-cloud.version>
-        <spring-cloud-alibaba.version>2023.0.1.0</spring-cloud-alibaba.version>
-        <spring-boot.version>3.2.4</spring-boot.version>
+        <spring-cloud.version>2024.0.0</spring-cloud.version>
+        <spring-cloud-alibaba.version>2023.0.3.2</spring-cloud-alibaba.version>
+        <spring-boot.version>3.4.3</spring-boot.version>
         <spring.plugin.version>3.0.0.RELEASE</spring.plugin.version>
-        <spring-boot-admin.version>3.2.2</spring-boot-admin.version>
+        <spring-boot-admin.version>3.4.3</spring-boot-admin.version>
         <jasypt.version>3.0.5</jasypt.version>
         <mybatis-plus.version>3.5.7</mybatis-plus.version>
         <dynamic-ds.version>4.3.1</dynamic-ds.version>
